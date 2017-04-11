@@ -5,8 +5,11 @@
 /tmp
 /out-tsc
 
+src - Copy
+
 # dependencies
 /node_modules
+bower_components
 
 # IDEs and editors
 /.idea

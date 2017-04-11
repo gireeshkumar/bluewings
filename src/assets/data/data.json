@@ -1,0 +1,97 @@
+{
+    "deck": [{
+            "id": 101,
+            "title": "BigData",
+            "pages": [{
+                    "id": 1,
+                    "image": "bigdata/bigdata-2-0000.jpg",
+                    "order": 1,
+                    "keywords": "kaziranga, bigdata"
+                },
+                {
+                    "id": 2,
+                    "image": "bigdata/bigdata-2-0001.jpg",
+                    "order": 2,
+                    "keywords": "bigdata, contents"
+                },
+                {
+                    "id": 3,
+                    "image": "bigdata/bigdata-2-0003.jpg",
+                    "order": 3,
+                    "keywords": "bigdata, introduction"
+                },
+                {
+                    "id": 4,
+                    "image": "bigdata/bigdata-2-0004.jpg",
+                    "order": 4,
+                    "keywords": "bigdata"
+                },
+                {
+                    "id": 5,
+                    "image": "bigdata/bigdata-2-0006.jpg",
+                    "order": 5,
+                    "keywords": "bigdata, volume"
+                },
+                {
+                    "id": 6,
+                    "image": "bigdata/bigdata-2-0009.jpg",
+                    "order": 6,
+                    "keywords": "bigdata, storage"
+                },
+                {
+                    "id": 7,
+                    "image": "bigdata/bigdata-2-0012.jpg",
+                    "order": 7,
+                    "keywords": "bigdata, structure"
+                }
+            ]
+        },
+        {
+            "title": "hadoop",
+            "id": 102,
+            "pages": [{
+                    "id": 1,
+                    "image": "hadoop/Hadoop-0000.jpg",
+                    "order": 1,
+                    "keywords": "hadoop"
+                },
+                {
+                    "id": 2,
+                    "image": "hadoop/Hadoop-0001.jpg",
+                    "order": 2,
+                    "keywords": "hadoop, introduction"
+                },
+                {
+                    "id": 3,
+                    "image": "hadoop/Hadoop-0003.jpg",
+                    "order": 3,
+                    "keywords": "hadoop,apache"
+                },
+                {
+                    "id": 4,
+                    "image": "hadoop/Hadoop-0004.jpg",
+                    "order": 4,
+                    "keywords": "hadoop, design"
+                },
+                {
+                    "id": 5,
+                    "image": "hadoop/Hadoop-0005.jpg",
+                    "order": 5,
+                    "keywords": "hadoop"
+                },
+                {
+                    "id": 6,
+                    "image": "hadoop/Hadoop-0006.jpg",
+                    "order": 6,
+                    "keywords": "hadoop"
+                },
+                {
+                    "id": 7,
+                    "image": "hadoop/Hadoop-0007.jpg",
+                    "order": 7,
+                    "keywords": "hadoop"
+                }
+            ]
+        }
+    ]
+}

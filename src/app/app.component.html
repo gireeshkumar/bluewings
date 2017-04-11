@@ -1,3 +1,61 @@
-<h1>
-  {{title}}
-</h1>
+<div class="header-container">
+    <!--<header>
+        <h1 class="title">Angular2 Designer</h1>
+    </header>-->
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+                <a class="navbar-brand" href="#">Designer</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"> <a routerLink="/" routerLinkActive="active">About</a></li>
+                    <li> <a routerLink="/designer">Designer</a></li>
+                    <li> <a routerLink="/users">Upload</a></li>
+                    <li> <a routerLink="/slideview">SlideView</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+        <!--/.container-fluid -->
+    </nav>
+</div>
+
+<div class="container-fluid">
+
+    <router-outlet></router-outlet>
+
+    <!--
+    <hr/>
+
+
+    <p>
+        <dcl-wrapper type="TestimonialComponent"></dcl-wrapper>
+    </p>
+    <p>
+        <dcl-wrapper type="TestimonialConfigComponent"></dcl-wrapper>
+    </p>
+-->
+</div>
+<!--
+<div class="footer-container">
+    <footer>
+        <span>&copy; 2016</span>
+    </footer>
+</div>
+-->
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+    </div>
+</footer>

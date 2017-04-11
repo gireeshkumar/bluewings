@@ -1,0 +1,7 @@
+docker run --rm -ti -v /d/dev/bluewings:/data -p 4200:4200 -p 49153:49153 gireeshk/node-ng-cli sh  -c "cd /data && ng serve"
+
+
+https://jgraph.github.io/mxgraph/javascript/examples/grapheditor/www/index.html
+
+https://jsplumbtoolkit.com/demos.html
+https://jsplumbtoolkit.com/community/demo/dynamicAnchors/index.html
