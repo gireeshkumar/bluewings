@@ -11,6 +11,7 @@ import {AboutComponent} from './about/about.component';
 import {UsersComponent} from './users/users.component';
 import {CalendarComponent} from './cal/cal.component';
 import {DclWrapper} from './wrapper/wrapper.component';
+import { FileUploadModule } from 'ng2-file-upload';
 
 
 import {TestimonialFeatureModule} from './testimonials/testimonial.feature.module';
@@ -18,6 +19,11 @@ import { NewCmpComponent } from './new-cmp/new-cmp.component';
 import { SlideViewComponent } from './slide-view/slide-view.component';
 import { SlideSearchComponent } from './slide-search/slide-search.component';
 import { BackendApiService } from './services/backend-api.service';
+import { ImageServiceService } from './services/image-service.service';
+import { FileuploadComponent } from './fileupload/fileupload.component';
+import { Select2CustomComponent } from './select2-custom/select2-custom.component';
+import { GTostringPipe } from './g-tostring.pipe';
+import { ImagemapeditorComponent } from './imagemapeditor/imagemapeditor.component';
 
 
 @NgModule({
@@ -30,7 +36,11 @@ import { BackendApiService } from './services/backend-api.service';
         CalendarComponent,
         NewCmpComponent,
         SlideViewComponent,
-        SlideSearchComponent
+        SlideSearchComponent,
+        FileuploadComponent,
+        Select2CustomComponent,
+        GTostringPipe,
+        ImagemapeditorComponent
     ],
     imports: [
         BrowserModule,
@@ -38,10 +48,11 @@ import { BackendApiService } from './services/backend-api.service';
         HttpModule,
         JsonpModule,
         routing,
-        TestimonialFeatureModule
+        TestimonialFeatureModule,
+        FileUploadModule 
     ],
     entryComponents: [CalendarComponent],
-    providers: [appRoutingProviders, SystemJsNgModuleLoader, BackendApiService],
+    providers: [appRoutingProviders, SystemJsNgModuleLoader, BackendApiService, ImageServiceService],
     bootstrap: [AppComponent]
 })
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { BackendApiService } from '../services/backend-api.service';
 
 declare var elasticlunr: any;
+declare var Reveal: any;
+declare var Deslider: any;
 
 @Component({
   selector: 'app-slide-search',
@@ -20,6 +22,8 @@ export class SlideSearchComponent implements OnInit {
   index: any;
   searchkeywords: string;
   datamap: any = {};
+  viewtype = 'search';
+  selectedDeck = null;
 
   constructor(apiservice: BackendApiService) {
     apiservice.getJSON().subscribe(data => {
@@ -53,7 +57,101 @@ export class SlideSearchComponent implements OnInit {
 
   }
 
+  doView(deckid, slideid) {
+    console.log('deckid: ' + deckid);
+    console.log('slideid: ' + slideid);
+
+    this.selectedDeck = this.datamap[deckid];
+
+    this.viewtype = 'view';
+
+
+    var imgSources = [];
+    var index = 0;
+    var i = 0;
+
+    for (let page of this.selectedDeck.pages) {
+      imgSources.push({link:'/assets/imgs/' + page.image});
+      if(page.id === slideid){
+        index = i;
+      }
+      i++;
+    }
+
+    var containerId = '#deslider-container';
+
+    var options = {
+      auto: {
+        speed: 3000,
+        pauseOnHover: true,
+      },
+      fullScreen: true,
+      swipe: true,
+      pagination: true,
+      repeat: true,
+      index: index
+    };
+
+    var initSlides = function () {
+      var myDeslider = new Deslider(imgSources, containerId, options);
+    }
+
+    setTimeout(initSlides, 1000);
+
+
+
+    /*
+    Reveal.initialize({
+			width: "100%",
+			
+			height: "800px",
+			
+			margin: 0,
+			
+		    // Display controls in the bottom right corner
+		    controls: true,
+
+		    // Display a presentation progress bar
+		    progress: false,
+
+		    // Push each slide change to the browser history
+		    history: false,
+
+		    // Enable keyboard shortcuts for navigation
+		    keyboard: true,
+
+		    // Enable the slide overview mode
+		    overview: true,
+
+		    // Vertical centering of slides
+		    center: true,
+
+		    // Loop the presentation
+		    loop: false,
+
+		    // Change the presentation direction to be RTL
+		    rtl: false,
+
+		    // Number of milliseconds between automatically proceeding to the 
+		    // next slide, disabled when set to 0, this value can be overwritten
+		    // by using a data-autoslide attribute on your slides
+		    autoSlide: 0,
+
+		    // Enable slide navigation via mouse wheel
+		    mouseWheel: false,
+
+		    // Apply a 3D roll to links on hover
+		    rollingLinks: true,
+
+		    // Transition style
+		    transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+			
+		});
+	Reveal.slide(0);
+  */
+  }
   doSearch() {
+    this.viewtype = 'search';
     const rslt = this.index.search(this.searchkeywords);
     console.log(rslt);
 
@@ -62,6 +160,9 @@ export class SlideSearchComponent implements OnInit {
       slidelist.push(this.datamap[rc.ref])
     }
     this.slides = slidelist;
+    //alert('done');
+
+    //this.doView();
   }
 
   changeDisplay(event, view) {

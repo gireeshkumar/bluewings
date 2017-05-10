@@ -10,3 +10,30 @@
         <p>The web's scaffolding tool for modern webapps.</p>
     </div>
 </div>
+<p>Custom select 1</p>
+<app-select2-custom [(data)]="data1" [(selecteddata)]="data1selected"></app-select2-custom>
+<p>{{data1selected | gTostring}}</p>
+<hr/>
+<p>Custom select 2</p>
+<app-select2-custom [(data)]="data2" [(selecteddata)]="data2selected"></app-select2-custom>
+<p>{{data2selected | json}}</p>
+<hr/>
+
+<!--
+    <p>Image map here 1</p>
+<img class="imagemap__img img-responsive" src="assets/powerpuff-girls.fw.jpg"/>
+
+<div>
+    <img id="myimagemaptest1" class="img-responsive" src="assets/slides-link-sample-0000.jpg" alt="Infografik1" usemap="#imagemap1">
+
+    <map id="imagemap1" name="imagemap1">
+
+        <area alt="" title="" href="JavaScript:alert('Clicked on : Box 1')" shape="rect" coords="102,92,238,202" />
+         <area alt="" title="" href="JavaScript:alert('Clicked on : Box 2')" shape="rect" coords="594,280,730,390" />
+          <area alt="" title="" href="JavaScript:alert('Clicked on : Box 3')" shape="rect" coords="1176,27,1312,137" />
+
+</map>
+
+</div>
+
+-->

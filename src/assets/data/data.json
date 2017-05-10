@@ -92,6 +92,276 @@
                     "keywords": "hadoop"
                 }
             ]
+        },
+
+        {
+            "title": "usecases",
+            "id": 103,
+            "pages": [{
+                    "id": 1,
+                    "image": "cslides0/Slide31.JPG",
+                    "order": 1,
+                    "keywords": "liferay,portal, case studies"
+                }, {
+                    "id": 2,
+                    "image": "cslides0/Slide32.JPG",
+                    "order": 2,
+                    "keywords": "healthcare, payer, availity, provider portal, case studies"
+                },
+                {
+                    "id": 3,
+                    "image": "cslides0/Slide34.JPG",
+                    "order": 3,
+                    "keywords": "healthcare, payer, claim, provider portal, case studies"
+                },
+                {
+                    "id": 4,
+                    "image": "cslides0/Slide35.JPG",
+                    "order": 4,
+                    "keywords": "healthcare, payer, epds, provider portal, case studies"
+                },
+                {
+                    "id": 5,
+                    "image": "cslides0/Slide36.JPG",
+                    "order": 5,
+                    "keywords": "healthcare, payer, managed services, provider portal, case studies"
+                },
+                {
+                    "id": 6,
+                    "image": "cslides0/Slide37.JPG",
+                    "order": 6,
+                    "keywords": "healthcare, payer, managed services, provider portal, case studies"
+                },
+                {
+                    "id": 7,
+                    "image": "cslides0/Slide39.JPG",
+                    "order": 7,
+                    "keywords": "cms, case studies, drupal, magnolia, share point, alfresco"
+                },
+                {
+                    "id": 8,
+                    "image": "cslides0/Slide40.JPG",
+                    "order": 8,
+                    "keywords": "ux, ui, case studies"
+                },
+                {
+                    "id": 9,
+                    "image": "cslides0/Slide41.JPG",
+                    "order": 9,
+                    "keywords": "regulatory, healthcare, case studies"
+                },
+                {
+                    "id": 10,
+                    "image": "cslides0/Slide5.JPG",
+                    "order": 10,
+                    "keywords": "healthcare, availity, case studies"
+                },
+                {
+                    "id": 11,
+                    "image": "cslides0/Slide18.JPG",
+                    "order": 11,
+                    "keywords": "projects, healthcare, hippa"
+                },
+                {
+                    "id": 12,
+                    "image": "cslides0/Slide20.JPG",
+                    "order": 13,
+                    "keywords": "medicare, healthcare, medicaid"
+                },
+                {
+                    "id": 13,
+                    "image": "cslides0/Slide21.JPG",
+                    "order": 13,
+                    "keywords": "payer in box, healthcare, payer"
+                },
+                {
+                    "id": 14,
+                    "image": "cslides0/Slide22.JPG",
+                    "order": 14,
+                    "keywords": "payer in box, healthcare, payer"
+                },
+                {
+                    "id": 15,
+                    "image": "cslides0/Slide23.JPG",
+                    "order": 15,
+                    "keywords": "partners, healthcare"
+                },
+                {
+                    "id": 16,
+                    "image": "cslides0/Slide28.JPG",
+                    "order": 16,
+                    "keywords": "availity, healthcare"
+                }
+            ]
+        },
+
+
+
+        {
+            "title": "cms",
+            "id": 104,
+            "pages": [{
+                    "id": 1,
+                    "image": "cslides0/Slide38.JPG",
+                    "order": 1,
+                    "keywords": "cms, content management"
+                },
+                {
+                    "id": 2,
+                    "image": "cslides0/Slide26.JPG",
+                    "order": 2,
+                    "keywords": "cms, portal, 360"
+                },
+                {
+                    "id": 3,
+                    "image": "cslides0/Slide29.JPG",
+                    "order": 3,
+                    "keywords": "cms, drupal"
+                },
+                {
+                    "id": 4,
+                    "image": "cslides0/Slide30.JPG",
+                    "order": 4,
+                    "keywords": "cms, portal"
+                }
+            ]
+        },
+
+
+        {
+            "title": "ust",
+            "id": 105,
+            "pages": [{
+                    "id": 1,
+                    "image": "cslides0/Slide43.JPG",
+                    "order": 1,
+                    "keywords": "ust, certification, qms"
+                },
+                {
+                    "id": 2,
+                    "image": "cslides0/Slide44.JPG",
+                    "order": 2,
+                    "keywords": "ust, partners, partnership"
+                },
+                {
+                    "id": 3,
+                    "image": "cslides0/Slide45.JPG",
+                    "order": 3,
+                    "keywords": "ust, service delivery"
+                },
+                {
+                    "id": 4,
+                    "image": "cslides0/Slide46.JPG",
+                    "order": 4,
+                    "keywords": "ust, edgeops,cdp, continues delivery"
+                },
+                {
+                    "id": 5,
+                    "image": "cslides0/Slide48.JPG",
+                    "order": 5,
+                    "keywords": "ust, copyright"
+                },
+                {
+                    "id": 6,
+                    "image": "cslides0/Slide49.JPG",
+                    "order": 6,
+                    "keywords": "ust, thankyou"
+                },
+                {
+                    "id": 7,
+                    "image": "cslides0/ustcampus.jpg",
+                    "order": 7,
+                    "keywords": "ust, campus, building"
+                },
+                {
+                    "id": 8,
+                    "image": "cslides0/Slide1.JPG",
+                    "order": 8,
+                    "keywords": "ust, amust"
+                },
+                {
+                    "id": 9,
+                    "image": "cslides0/Slide2.JPG",
+                    "order": 9,
+                    "keywords": "ust, d4h, happines, ux, design for happines"
+                },
+                {
+                    "id": 10,
+                    "image": "cslides0/Slide3.JPG",
+                    "order": 10,
+                    "keywords": "ust, mvp"
+                },
+                {
+                    "id": 11,
+                    "image": "cslides0/Slide4.JPG",
+                    "order": 11,
+                    "keywords": "ust, al, lifecycle"
+                },
+                {
+                    "id": 12,
+                    "image": "cslides0/Slide6.JPG",
+                    "order": 12,
+                    "keywords": "ust, managed services, 3shift"
+                },
+                {
+                    "id": 13,
+                    "image": "cslides0/Slide7.JPG",
+                    "order": 13,
+                    "keywords": "ust,operations platform, service desk"
+                },
+                {
+                    "id": 14,
+                    "image": "cslides0/Slide8.JPG",
+                    "order": 14,
+                    "keywords": "ust,edgeconnect,cobit"
+                },
+                {
+                    "id": 15,
+                    "image": "cslides0/Slide15.JPG",
+                    "order": 15,
+                    "keywords": "ust,setitup,set it up ameraica"
+                },
+                {
+                    "id": 16,
+                    "image": "cslides0/Slide16.JPG",
+                    "order": 16,
+                    "keywords": "ust,setitup,set it up ameraica"
+                },
+                {
+                    "id": 17,
+                    "image": "cslides0/Slide16.JPG",
+                    "order": 17,
+                    "keywords": "ust,xpanxion"
+                },
+                {
+                    "id": 18,
+                    "image": "cslides0/Slide23.JPG",
+                    "order": 18,
+                    "keywords": "partner,partners, healthcare"
+                },
+                {
+                    "id": 19,
+                    "image": "cslides0/Slide24.JPG",
+                    "order": 19,
+                    "keywords": "partners, ust"
+                },
+                {
+                    "id": 20,
+                    "image": "cslides0/Slide27.JPG",
+                    "order": 20,
+                    "keywords": "ams, ust"
+                },
+                {
+                    "id": 21,
+                    "image": "cslides0/Slide33.JPG",
+                    "order": 21,
+                    "keywords": "360, abuild, methodology, methodologies, ust"
+                }
+            ]
         }
+
+
+
+
     ]
 }

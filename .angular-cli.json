@@ -18,15 +18,26 @@
         "testTsconfig": "tsconfig.spec.json",
         "prefix": "app",
         "styles": [
+            "../node_modules/bootstrap/dist/css/bootstrap.css",
+            "../node_modules/bootstrap/dist/css/bootstrap-theme.min.css",
             "bower_components/jquery-ui/themes/base/jquery-ui.min.css",
-            "bower_components/reveal-js/css/reveal.min.css",
             "bower_components/reveal-js/css/theme/simple.css",
+            "bower_components/select2-4.0.3/dist/css/select2.min.css",
             "css/main.css",
             "styles.css"
         ],
         "scripts": [
-            "bower_components/reveal-js/js/reveal.min.js",
-            "bower_components/elasticlunr.js/elasticlunr.min.js"
+            "../node_modules/jquery/dist/jquery.js",
+            "../node_modules/bootstrap/dist/js/bootstrap.js",
+
+            "../node_modules/reflect-metadata/Reflect.js",
+
+            "bower_components/elasticlunr.js/elasticlunr.min.js",
+            "bower_components/rwdImageMaps/jquery.rwdImageMaps.min.js",
+            "bower_components/maphilight/jquery.maphilight.min.js",
+            "bower_components/select2-4.0.3/dist/js/select2.min.js"
+
+
         ],
         "environmentSource": "environments/environment.ts",
         "environments": {
