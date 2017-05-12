@@ -1,10 +1,8 @@
-<div class="container">
-    <div class="resource">
-        <h4>Slide view </h4>
-    </div>
-
-    <div class="resource">
-        <h4>Yeoman</h4>
-        <p>The web's scaffolding tool for modern webapps.</p>
+<div *ngFor="let slide of slides; let i = index">
+    <div class="clearfix" *ngIf="i % 3 == 0"></div>
+    <div class="col-md-4 col-sm-6 col-12">
+        <div class="thumbnail">
+            <img class="group list-group-image" src="api/v1/file/view/{{slide.file}}" (click)="selectItem(slide)" />
+        </div>
     </div>
 </div>

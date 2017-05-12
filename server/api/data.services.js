@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
 })
 
 
-router.get(['/domain', '/category', '/tags'], function(req, res) {
+router.get(['/domain', '/category', '/tags', '/slides'], function(req, res) {
 
     let arr = req.url.split("/");
     let collectionname = arr[arr.length - 1];
@@ -22,7 +22,12 @@ router.get(['/domain', '/category', '/tags'], function(req, res) {
     collection.all().then(
         cursor => cursor.map(function(value) {
             console.log(value);
-            return { key: value._key, name: value.name };
+            if (collectionname === "slides") {
+                return { key: value._key, file: value.file, originalname: value.originalname };
+            } else {
+                return { key: value._key, name: value.name };
+            }
+
         })
     ).then(
         results => res.send(results),

@@ -23,8 +23,10 @@
             "bower_components/jquery-ui/themes/base/jquery-ui.min.css",
             "bower_components/reveal-js/css/theme/simple.css",
             "bower_components/select2-4.0.3/dist/css/select2.min.css",
+            "bower_components/easy-mapper-master/docs/easy-mapper.css",
             "css/main.css",
             "styles.css"
+
         ],
         "scripts": [
             "../node_modules/jquery/dist/jquery.js",
@@ -35,7 +37,9 @@
             "bower_components/elasticlunr.js/elasticlunr.min.js",
             "bower_components/rwdImageMaps/jquery.rwdImageMaps.min.js",
             "bower_components/maphilight/jquery.maphilight.min.js",
-            "bower_components/select2-4.0.3/dist/js/select2.min.js"
+            "bower_components/select2-4.0.3/dist/js/select2.min.js",
+            "bower_components/easy-mapper-master/docs/easy-mapper-1.2.0.js"
+
 
 
         ],

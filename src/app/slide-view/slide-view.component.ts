@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BackendApiService } from '../services/backend-api.service';
 
 @Component({
   selector: 'app-slide-view',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SlideViewComponent implements OnInit {
 
-  constructor() { }
+  apiservice:BackendApiService;
+  slides:any;
+  errorMessage:any;
+
+  constructor(apiservice: BackendApiService) { 
+    this.apiservice = apiservice;
+  }
 
   ngOnInit() {
+      this.apiservice.getCollection('slides')
+                  .then(
+                     slides => { this.slides = slides;  },
+                     error =>  this.errorMessage = <any>error);
   }
 
 }
