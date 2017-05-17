@@ -25,3 +25,6 @@ ng build -w
 
 
 ps aux | grep nodejs
+
+
+docker run --rm -ti -e ARANGO_ROOT_PASSWORD=root#123 --volumes-from arangodb-persist -v /d/docker/arangodb/arangodb3-apps:/var/lib/arangodb-apps:rw -p 8529:8529  arangodb

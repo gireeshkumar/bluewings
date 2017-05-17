@@ -1,8 +1,17 @@
-<div *ngFor="let slide of slides; let i = index">
-    <div class="clearfix" *ngIf="i % 3 == 0"></div>
-    <div class="col-md-4 col-sm-6 col-12">
-        <div class="thumbnail">
-            <img class="group list-group-image" src="api/v1/file/view/{{slide.file}}" (click)="selectItem(slide)" />
-        </div>
-    </div>
+<p>
+    slide-view works!
+</p>
+<a (click)="highLightMap(e)">Highlight</a>
+<div>
+    <img id="myimagemaptest1" class="img-responsive" src="api/v1/file/view/{{parentslide.file}}" alt="Infografik1" usemap="#imagemap1">
+
+    <map id="imagemap1" name="imagemap1">
+
+        <area  *ngFor="let area of parentslide.map; let i = index" href="JavaScript:alert('Clicked on : {{area.link}}')" 
+              shape="rect"
+              coords="{{area.coords.sx}}, {{area.coords.sy}}, {{area.coords.ex}}, {{area.coords.ey}}" />
+        <!-- <area alt="" title="" href="JavaScript:alert('Clicked on : Box 2')" shape="rect" coords="594,280,730,390" /> -->
+
+</map>
+
 </div>

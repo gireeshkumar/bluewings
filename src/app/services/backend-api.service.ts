@@ -32,16 +32,21 @@ export class BackendApiService {
     return this.jsondata;
   }
 
+public updateCollection(collectionname: string, key: string, data:any) {
+   return this.http.post('/api/v1/data/' + collectionname +  '/' + key , data ).toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+}
 
-  public getCollection(collectionname: string) {
+  public getCollection(collectionname: string, key?: string) {
 
-    return this.http.get('/api/v1/data/'+collectionname).toPromise()
-                  .then(this.extractData)
-                  .catch(this.handleError);
+    return this.http.get('/api/v1/data/' + collectionname + (key === null || key === undefined ? '' : '/' + key)  ).toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
 
   }
 
-     public saveSlides(slides:any) {
+  public saveSlides(slides: any) {
 
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
@@ -49,16 +54,16 @@ export class BackendApiService {
     // return this.http.post('/save', body, headers).map((res: Response) => res.json());
     const http = this.http;
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
 
       http.post('/api/v1/file/save', body, headers)
-      .subscribe((result) => {
-        console.log(result, 'result reached');
-        resolve(result);
-      }, (err) => {
-        console.log(err, 'error reached');
-        reject(err);
-      });
+        .subscribe((result) => {
+          console.log(result, 'result reached');
+          resolve(result);
+        }, (err) => {
+          console.log(err, 'error reached');
+          reject(err);
+        });
 
     })
 
@@ -69,21 +74,21 @@ export class BackendApiService {
 
 
   private extractData(res: Response) {
-  let body = res.json();
-  return body || { };
-}
-private handleError (error: Response | any) {
-  // In a real world app, we might use a remote logging infrastructure
-  let errMsg: string;
-  if (error instanceof Response) {
-    const body = error.json() || '';
-    const err = body.error || JSON.stringify(body);
-    errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-  } else {
-    errMsg = error.message ? error.message : error.toString();
+    let body = res.json();
+    return body || {};
   }
-  console.error(errMsg);
-  return Promise.reject(errMsg);
-}
+  private handleError(error: Response | any) {
+    // In a real world app, we might use a remote logging infrastructure
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      const err = body.error || JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.error(errMsg);
+    return Promise.reject(errMsg);
+  }
 
 }

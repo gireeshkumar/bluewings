@@ -1,26 +1,50 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { BackendApiService } from '../services/backend-api.service';
+
+declare var $: any;
 
 @Component({
   selector: 'app-slide-view',
   templateUrl: './slide-view.component.html',
   styleUrls: ['./slide-view.component.css']
 })
-export class SlideViewComponent implements OnInit {
+export class SlideViewComponent implements OnInit, AfterViewInit {
 
-  apiservice:BackendApiService;
-  slides:any;
-  errorMessage:any;
+  parentslide: any;
+  errorMessage: any;
 
-  constructor(apiservice: BackendApiService) { 
-    this.apiservice = apiservice;
-  }
+  mapadded = false;
+
+  constructor(private route: ActivatedRoute, private apiservice: BackendApiService) { }
 
   ngOnInit() {
-      this.apiservice.getCollection('slides')
-                  .then(
-                     slides => { this.slides = slides;  },
-                     error =>  this.errorMessage = <any>error);
+    this.route.params.subscribe(
+      (params: Params) => {
+        console.log('params');
+        console.log(params);
+
+        const slidekey = params['id'];
+        if (slidekey != null && slidekey != undefined) {
+          this.apiservice.getCollection('slides', params['id'])
+            .then(
+            slide => { 
+              this.parentslide = slide; 
+              this.mapadded = true; 
+             // setTimeout(function(){ $('#myimagemaptest1').rwdImageMaps(); }, 100);
+            },
+            error => this.errorMessage = <any>error
+            );
+        }
+
+      }
+    );
+  }
+
+
+  ngAfterViewInit() {
+    if (this.mapadded)
+      $('#myimagemaptest1').rwdImageMaps();
   }
 
 }

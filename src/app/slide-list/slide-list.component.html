@@ -1,0 +1,14 @@
+<p>viewtype :: {{viewtype}}</p>
+<div *ngFor="let slide of slides; let i = index">
+    <div class="clearfix" *ngIf="i % 3 == 0"></div>
+    <div class="col-md-4 col-sm-6 col-12">
+        <div class="thumbnail" [ngClass]="{'alert alert-info': isSelected(slide)}">
+            <img class="group list-group-image well well-sm" src="api/v1/file/view/{{slide.file}}" (click)="selectItem(slide)" />
+
+            <button type="button" class="btn btn-success btn-s" (click)="createLink(slide)" *ngIf="viewtype === 'default'">
+                <span class="glyphicon glyphicon-upload"></span> Link 
+            </button>
+
+        </div>
+    </div>
+</div>

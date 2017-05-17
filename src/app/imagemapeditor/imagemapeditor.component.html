@@ -1,7 +1,14 @@
 <div>
-
-
+    <div>
+        <button type="button" class="btn btn-success btn-s" (click)="saveAll()">
+            <span class="glyphicon glyphicon-upload"></span> Save 
+        </button>
+        <button type="button" class="btn btn-success btn-s" (click)="slideView()">
+            <span class="glyphicon glyphicon-upload"></span> View 
+        </button>
+    </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="addlinkpopup">
+        <input type="hidden" id="mapeleindex" name="mapeleindex" [(value)]="arrayindex" (change)="onSelectedIndexUpdate(event)" />
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -9,11 +16,11 @@
                     <h4 class="modal-title">Find Slides</h4>
                 </div>
                 <div class="modal-body">
-                    <app-slide-view></app-slide-view>
+                    <app-slide-list [(selectedSlide)]="selectedSlide" [(selectedSlideKey)]="selectedSlideKey" viewtype="link"></app-slide-list>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Link</button>
+                    <button type="button" class="btn btn-primary" (click)="linkSelectedSlide()">Link</button>
                 </div>
             </div>
             <!-- /.modal-content $('#myModal').modal('show') -->
@@ -156,7 +163,7 @@
 
         <!-- 이미지 -->
         <div id="workspace-img-wrap">
-            <img id="workspace-img" src="/assets/sampleimg.png">
+            <img id="workspace-img" src="{{getImageURL(linkSlide)}}">
 
             <!-- 그리드 -->
             <div id="grid-x1" class="grid-1"></div>

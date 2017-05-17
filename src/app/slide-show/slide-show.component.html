@@ -1,0 +1,12 @@
+<div *ngIf="parentslide">
+    <a (click)="highLightMap($event)">Highlight</a>
+    <img id="myimagemaptest1" class="img-responsive" src="{{getSlideImage(parentslide)}}" alt="Infografik1" usemap="#imagemap1">
+    <map id="imagemap1" name="imagemap1" *ngIf="parentslide.map">
+
+      <area  *ngFor="let area of parentslide.map; let i = index" routerLink="/slideshow/{{area.link}}" class="areacomp"
+            shape="rect"
+            coords="{{area.coords.sx}}, {{area.coords.sy}}, {{area.coords.ex}}, {{area.coords.ey}}" />
+      <!-- <area alt="" title="" href="JavaScript:alert('Clicked on : Box 2')" shape="rect" coords="594,280,730,390" /> -->
+
+</map>
+</div>

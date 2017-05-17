@@ -24,6 +24,7 @@
             "bower_components/reveal-js/css/theme/simple.css",
             "bower_components/select2-4.0.3/dist/css/select2.min.css",
             "bower_components/easy-mapper-master/docs/easy-mapper.css",
+            "bower_components/jquery-map-trifecta/css/map-trifecta.css",
             "css/main.css",
             "styles.css"
 
@@ -35,12 +36,10 @@
             "../node_modules/reflect-metadata/Reflect.js",
 
             "bower_components/elasticlunr.js/elasticlunr.min.js",
-            "bower_components/rwdImageMaps/jquery.rwdImageMaps.min.js",
             "bower_components/maphilight/jquery.maphilight.min.js",
             "bower_components/select2-4.0.3/dist/js/select2.min.js",
-            "bower_components/easy-mapper-master/docs/easy-mapper-1.2.0.js"
-
-
+            "bower_components/easy-mapper-master/docs/easy-mapper-1.2.0.js",
+            "bower_components/jquery-map-trifecta/js/jquery.map-trifecta.min.js"
 
         ],
         "environmentSource": "environments/environment.ts",

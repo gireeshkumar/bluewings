@@ -26,7 +26,7 @@ export class AboutComponent  implements AfterViewInit{
 
     ngAfterViewInit() {
 
-        $('#myimagemaptest1').rwdImageMaps();
+        // $('#myimagemaptest1').rwdImageMaps();
 
 
     }
