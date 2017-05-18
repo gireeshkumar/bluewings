@@ -84,6 +84,7 @@ router.get('/:collection/:id', function(req, res) {
     }
 
 });
+// TODO
 
 router.get(['/domain', '/category', '/tags', '/slides'], function(req, res) {
 
