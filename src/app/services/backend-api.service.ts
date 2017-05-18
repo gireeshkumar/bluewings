@@ -52,24 +52,10 @@ public updateCollection(collectionname: string, key: string, data:any) {
     const options = new RequestOptions({ headers: headers });
     const body = slides;//JSON.stringify(slides);
     // return this.http.post('/save', body, headers).map((res: Response) => res.json());
-    const http = this.http;
 
-    return new Promise(function (resolve, reject) {
-
-      http.post('/api/v1/file/save', body, headers)
-        .subscribe((result) => {
-          console.log(result, 'result reached');
-          resolve(result);
-        }, (err) => {
-          console.log(err, 'error reached');
-          reject(err);
-        });
-
-    })
-
-
-
-
+    return  this.http.post('/api/v1/file/save', body, headers).toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
   }
 
 

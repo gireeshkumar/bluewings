@@ -45,13 +45,20 @@ router.post('/api', upload.array('file'), function(req, res) {
 router.post('/save', function(req, res) { //bodyParser.json(),
     console.log(req.body);
 
-    for (var i = 0; i < req.body.length; i++) {
-        var dta = req.body[i];
-        saveSlide(dta);
+    var promises = [];
+
+    var allslidestosave = req.body;
+    var savedslides = [];
+
+    for (var i = 0; i < allslidestosave.length; i++) {
+        var dta = allslidestosave[i];
+        var p = saveSlide(dta).then(data => savedslides.push(data));
+        promises.push(p);
     }
 
-
-    res.send({});
+    Promise.all(promises).then(values => {
+        res.send(savedslides);
+    });
 });
 
 
@@ -62,55 +69,67 @@ function saveSlide(data) {
 
     var catkeys, domainkeys, tagkeys, slidekey;
 
-    Promise.all([
+    return new Promise(function(resolve, reject) {
+        Promise.all([
 
-        saveCollection('category', data.category).then(keys => {
-            console.log('Save category, success');
-            catkeys = keys;
-        }, err => console.log("error:" + err)),
+            saveSlideCollection(data).then(key => {
+                console.log('Save slide, success >>>> [' + data.filename + '] Key = ' + key);
+                slidekey = key;
+                return slidekey;
+            }, err => console.log("error[SaveSlide]:" + err)),
 
-        saveCollection('domain', data.domain).then(keys => {
-            console.log('Save domain, success');
-            domainkeys = keys;
-        }, err => console.log("error:" + err)),
+            saveCollection('category', data.category).then(keys => {
+                console.log('Save category, success');
+                catkeys = keys;
+            }, err => console.log("error[SaveCategory]:" + err)),
 
-        saveCollection('tags', data.tags).then(keys => {
-            console.log('Save tags, success');
-            tagkeys = keys;
-        }, err => console.log("error:" + err)),
+            saveCollection('domain', data.domain).then(keys => {
+                console.log('Save domain, success');
+                domainkeys = keys;
+            }, err => console.log("error[SaveDomain]:" + err)),
 
-        saveSlideCollection(data).then(key => {
-            console.log('Save slide, success >>>> ');
-            slidekey = key;
-        }, err => console.log("error:" + err))
+            saveCollection('tags', data.tags).then(keys => {
+                console.log('Save tags, success');
+                tagkeys = keys;
+            }, err => console.log("error[SaveTags]:" + err))
 
-    ]).then(values => {
-        console.log("All collection save completed");
-        console.log(values);
 
-        console.log("Link slide with category/tags/domain");
+        ]).then(values => {
+            console.log("All collection save completed");
+            console.log(values);
 
-        var edges = [];
-        var sldata = { name: "slide data" };
+            console.log("Link slide with category/tags/domain => slidekey == " + slidekey);
 
-        console.log("Save Edge - Category" + catkeys);
-        saveEdges({ value: 'Category -> Slide', from: 'category', to: 'slide' }, slidekey, catkeys);
+            var edges = [];
+            var sldata = { name: "slide data" };
 
-        console.log("Save Edge - Domain" + domainkeys);
-        saveEdges({ value: 'Edge -> Slide', from: 'domain', to: 'slide' }, slidekey, domainkeys);
+            console.log("Save Edge - Category" + catkeys);
+            saveEdges({ value: 'Category -> Slide', from: 'category', to: 'slide' }, slidekey, catkeys);
 
-        console.log("Save Edge - Tags" + tagkeys);
-        saveEdges({ value: 'Tags -> Slide', from: 'tags', to: 'slide' }, slidekey, tagkeys);
+            console.log("Save Edge - Domain" + domainkeys);
+            saveEdges({ value: 'Edge -> Slide', from: 'domain', to: 'slide' }, slidekey, domainkeys);
 
-        // edges = edges.concat(toEdge(slidekey, catkeys));
-        // edges = edges.concat(toEdge(slidekey, domainkeys));
-        // edges = edges.concat(toEdge(slidekey, tagkeys));
+            console.log("Save Edge - Tags" + tagkeys);
+            saveEdges({ value: 'Tags -> Slide', from: 'tags', to: 'slide' }, slidekey, tagkeys);
 
+            data.key = slidekey;
+            resolve(data);
+        });
     });
+
+
 }
 
 function saveEdges(sldata, slidekey, keys) {
     //TODO not Promise, not waiting for the completion. Use Promise
+
+    console.log('Save Edge called:[' + sldata + '] =>' + keys);
+
+    if (keys === null || keys === undefined || keys.length === 0) {
+        console.log('Save Edge called:[' + sldata + ']  SKIP ');
+        return;
+    }
+
 
     collection = dbinstance.edgeCollection('has-slides');
 
@@ -135,11 +154,30 @@ function saveEdges(sldata, slidekey, keys) {
     }
 }
 
+function getTextAttr(array) {
+
+    if (array === null || array === undefined || array.length === 0) {
+        return '';
+    }
+
+    var txtattr = [];
+    for (var i = 0; i < array.length; i++) {
+        txtattr.push(array[i].text);
+    }
+    return txtattr.join(',');
+}
+
 function saveSlideCollection(data) {
     return new Promise(function(resolve, reject) {
 
         collection = dbinstance.collection("slides");
-        collection.save({ file: data.filename, originalname: data.originalname, desc: 'some description here' }).then(
+
+        const slideobj = { file: data.filename, originalname: data.originalname, desc: 'some description here' };
+        slideobj.categories = getTextAttr(data.category);
+        slideobj.tags = getTextAttr(data.tags);
+        slideobj.domains = getTextAttr(data.domain);
+
+        collection.save(slideobj).then(
             meta => {
                 console.log("Slide save success");
                 console.log(meta);
@@ -151,9 +189,17 @@ function saveSlideCollection(data) {
 }
 
 function saveCollection(name, data) {
-    console.log('Save collection called:[' + name + ']')
+
 
     return new Promise(function(resolve, reject) {
+
+        console.log('Save collection called:[' + name + '] =>' + data);
+
+        if (data === null || data === undefined || data.length === 0) {
+            console.log('Save collection called:[' + name + ']  SKIP ');
+            resolve([]);
+            return;
+        }
 
         // if 'id' doesnt exist, insert
         var ids = [];

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { ImageServiceService } from '../services/image-service.service';
 import { BackendApiService } from '../services/backend-api.service';
+import { Router } from '@angular/router';
 
 // const URL = '/api/';
 const URL = 'http://192.168.99.100:3000/api/v1/file/api/';
@@ -56,35 +57,35 @@ export class FileuploadComponent implements OnInit {
   domains: any; _domains: any;
   tags: any; _tags: any;
 
-  errorMessage:any;
-  viewmode:string = '';
+  errorMessage: any;
+  viewmode: string = '';
 
-  constructor(imageservice: ImageServiceService, apiService: BackendApiService) {
+  constructor(imageservice: ImageServiceService, apiService: BackendApiService, private router: Router) {
     this.imageservice = imageservice;
     this.apiService = apiService;
 
-  apiService.getCollection('category')
-                  .then(
-                     categories => { this._categories = categories; this.categories = this.convertToSelectArray(categories) },
-                     error =>  this.errorMessage = <any>error);
+    apiService.getCollection('category')
+      .then(
+      categories => { this._categories = categories; this.categories = this.convertToSelectArray(categories) },
+      error => this.errorMessage = <any>error);
 
-  apiService.getCollection('tags')
-                  .then(
-                     tags => { this._tags = tags; this.tags = this.convertToSelectArray(tags) },
-                     error =>  this.errorMessage = <any>error);
+    apiService.getCollection('tags')
+      .then(
+      tags => { this._tags = tags; this.tags = this.convertToSelectArray(tags) },
+      error => this.errorMessage = <any>error);
 
-apiService.getCollection('domain')
-                  .then(
-                     domains => {this._domains = domains; this.domains = this.convertToSelectArray(domains)},
-                     error =>  this.errorMessage = <any>error);
+    apiService.getCollection('domain')
+      .then(
+      domains => { this._domains = domains; this.domains = this.convertToSelectArray(domains) },
+      error => this.errorMessage = <any>error);
 
   }
 
-  convertToSelectArray(array){
-    var ardata = [];
-    if(array != null && array.length > 0){
-      for(var i = 0; i < array.length; i++){
-        ardata.push( {id: array[i].key, text: array[i].name} );
+  convertToSelectArray(array) {
+    let ardata = [];
+    if (array != null && array.length > 0) {
+      for (let i = 0; i < array.length; i++) {
+        ardata.push({ id: array[i].key, text: array[i].name });
       }
     }
     return ardata;
@@ -113,15 +114,31 @@ apiService.getCollection('domain')
     return void 0;
   }
 
+  saveFileHandler(result) {
+    this.viewmode = 'editlinks';
+    console.log(result);
 
+    for (let i = 0; i < result.length; i++) {
+      this.updateKey(result[i].filename, result[i].key);
+    }
+  }
+
+  updateKey(filename, key) {
+    for (let i = 0; i < this.uploadedFiles.length; i++) {
+      if (this.uploadedFiles[i].filename === filename) {
+        this.uploadedFiles[i].key = key;
+        return;
+      }
+    }
+  }
 
   saveAll() {
     console.log(this.uploadedFiles);
-    this.apiService.saveSlides(this.uploadedFiles).then(result=> this.viewmode = 'editlinks', err=> console.log(err));
+    this.apiService.saveSlides(this.uploadedFiles).then(result => this.saveFileHandler(result), err => console.log(err));
   }
 
-  addMapping(){
-
+  addMapping(file) {
+    this.router.navigate(['/mapeditor', file.key]);
   }
 
   cancelAll() {
