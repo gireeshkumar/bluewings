@@ -46,6 +46,25 @@ public updateCollection(collectionname: string, key: string, data:any) {
 
   }
 
+    public getMetadata() {
+
+    return this.http.get('/api/v1/data/metadata'  ).toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+
+  }
+
+
+    public searchCollection(collectionname: string, field: string, query: string) {
+
+    // http://192.168.99.100:3000/api/v1/data/search/slides?q=healthcare&f=searchcontent
+
+    return this.http.get('/api/v1/data/search/' + collectionname + '?f=' + field + '&q=' + query  ).toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+
+  }
+
   public saveSlides(slides: any) {
 
     const headers = new Headers({ 'Content-Type': 'application/json' });

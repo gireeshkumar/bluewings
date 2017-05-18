@@ -1,4 +1,5 @@
 var express = require('express');
+var path = require('path');
 var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
@@ -17,6 +18,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static("dist/"));
 
+var indexhtml = path.join(global.appRoot, 'dist', 'index.html');
+console.log(indexhtml);
+
+
 const dbinstance = require("./database");
 // console.log("dbinstance");
 // console.log(dbinstance.db);
@@ -28,11 +33,16 @@ app.get('/api/v1/*', function(req, res) {
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
-app.get('*', function(req, res) {
-    // redirect to home page
-    res.redirect('/');
-});
+// app.get('*', function(req, res) {
+//     // redirect to home page
+//     res.redirect('/');
+// });
 
+
+app.all('*', (req, res) => {
+    console.log(`[TRACE] Server 404 request: ${req.originalUrl}`);
+    res.status(200).sendFile(indexhtml);
+});
 
 
 var PORT = process.env.PORT || 3000;

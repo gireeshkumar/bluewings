@@ -105,6 +105,7 @@ export class FileuploadComponent implements OnInit {
   onCompleteItem(fileitem) {
     console.log('File upload completed');
     console.log(fileitem);
+    fileitem.desc = '';
 
     this.uploadedFiles.push(fileitem);
   }

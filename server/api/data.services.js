@@ -9,6 +9,28 @@ router.get('/', function(req, res) {
     res.send("Bluewings API Services - Data Services = ");
 })
 
+// 950
+//http://192.168.99.100:3000/api/v1/data/slides/search?f=searchcontent&q=parnter
+//
+router.get('/search/:collection', function(req, res) {
+    collectionname = req.params.collection;
+    console.log("Query on collection -" + collectionname);
+    console.log("Field::" + req.query.f);
+    console.log("Query::" + req.query.q);
+
+    collection = dbinstance.collection(collectionname);
+
+    collection.fulltext(req.query.f, req.query.q).then(
+        cursor => cursor.map(function(value) {
+            return toCollectionObject(value);
+        })
+    ).then(
+        results => res.send(results),
+        err => console.error('Failed to fetch all documents:', err)
+    );
+});
+
+
 
 /*
        "_key": "183635",
@@ -61,24 +83,46 @@ router.post('/:collection/:id', function(req, res) {
         err => console.error('Failed to fetch all documents:', err)
     );
 });
+router.get('/metadata', function(req, res) {
+
+    var metadata = {};
+
+    Promise.all([
+        getCollectionAllData('category')
+        .then(results => metadata.categories = results, err => res.status(500).send(err)),
+
+        getCollectionAllData('domain')
+        .then(results => metadata.domain = results, err => res.status(500).send(err)),
+
+        getCollectionAllData('tags')
+        .then(results => metadata.tags = results, err => res.status(500).send(err))
+    ]).then(values => res.send(metadata));
+
+
+});
+
+
 
 router.get('/:collection/:id', function(req, res) {
+
+    console.log("Call to => router.get('/:collection/:id')");
+
     collectionname = req.params.collection;
     if (['domain', 'category', 'tags', 'slides'].indexOf(collectionname) == -1) {
         res.send("Unknown collection - " + collectionname);
     } else {
         // res.send('Find collection [' + collectionname + '] by id[' + req.params.id + '] ');
-
         collection = dbinstance.collection(collectionname);
 
         var example = { "_key": req.params.id + '' };
+
 
         collection.byExample(example).then(
             cursor => cursor.map(function(value) {
                 return toCollectionObject(value);
             })
         ).then(
-            results => res.send((results.length > 0 ? (results.length == 1 ? results[0] : results) : null)),
+            results => res.send((results.length > 0 ? (results.length == 1 ? results[0] : results) : [])),
             err => console.error('Failed to fetch all documents:', err)
         );
     }
@@ -86,24 +130,38 @@ router.get('/:collection/:id', function(req, res) {
 });
 // TODO
 
-router.get(['/domain', '/category', '/tags', '/slides'], function(req, res) {
 
-    let arr = req.url.split("/");
-    let collectionname = arr[arr.length - 1];
+router.get('/:collection', function(req, res) {
+    collectionname = req.params.collection;
+    if (['domain', 'category', 'tags', 'slides'].indexOf(collectionname) == -1) {
+        res.send("Unknown collection - " + collectionname);
+        return;
+    }
+    // let arr = req.url.split("/");
+    // let collectionname = arr[arr.length - 1];
+
+    // var fcount = (req.query.first === undefined ? -1 : parseInt(req.query.first)); // first count
+    // var lcount = (req.query.last === undefined ? -1 : parseInt(req.query.last)); // get last n records
+
+    // console.log("fcount => " + fcount + ' [>=0 ? ]' + (fcount >= 0));
+    // console.log("lcount => " + lcount + ' [>=0 ? ]' + (lcount >= 0));
 
 
     console.log("Collection => " + collectionname);
 
-    collection = dbinstance.collection(collectionname);
+    getCollectionAllData(collectionname).then(results => res.send(results), err => res.status(500).send(err));
 
-    collection.all().then(
-        cursor => cursor.map(function(value) {
-            return toCollectionObject(value);
-        })
-    ).then(
-        results => res.send(results),
-        err => console.error('Failed to fetch all documents:', err)
-    );
+    // collection = dbinstance.collection(collectionname);
+
+    // collection.all()
+    //     .then(
+    //         cursor => cursor.map(function(value) {
+    //             return toCollectionObject(value);
+    //         })
+    //     ).then(
+    //         results => res.send(results),
+    //         err => console.error('Failed to fetch all documents:', err)
+    //     );
 
 });
 
@@ -115,6 +173,23 @@ router.get('/', function(req, res) {
 
 
 
+
+
+
+function getCollectionAllData(collectionname) {
+    return new Promise(function(resolve, reject) {
+        collection = dbinstance.collection(collectionname);
+        collection.all()
+            .then(
+                cursor => cursor.map(function(value) {
+                    return toCollectionObject(value);
+                })
+            ).then(
+                results => resolve(results),
+                err => reject('Failed to fetch all documents:', err)
+            );
+    });
+}
 
 
 module.exports = router

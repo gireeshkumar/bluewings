@@ -16,11 +16,19 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"> <a routerLink="/" routerLinkActive="active">About</a></li>
-                    <li> <a routerLink="/designer">Designer</a></li>
-                    <li> <a routerLink="/fileupload">FileUpload</a></li>
-                    <li> <a routerLink="/mapeditor">Create Maps</a></li>
-                    <li> <a routerLink="/slidesearch">Search</a></li>
+
+                    <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/']">About</a></li>
+                    <li role="presentation" routerLinkActive="active"><a [routerLink]="['/designer']">Designer</a></li>
+                    <li role="presentation" routerLinkActive="active"><a [routerLink]="['/fileupload']">FileUpload</a></li>
+                    <!--<li role="presentation" routerLinkActive="active"><a [routerLink]="['/mapeditor']">Create Maps</a></li>-->
+                    <li role="presentation" routerLinkActive="active"><a [routerLink]="['/slidesearch']">Search</a></li>
+
+
+                    <!--<li> <a routerLink="/" routerLinkActive="active-link">About</a></li>
+                    <li> <a routerLink="/designer" routerLinkActive="active-link">Designer</a></li>
+                    <li> <a routerLink="/fileupload" routerLinkActive="active-link">FileUpload</a></li>
+                    <li> <a routerLink="/mapeditor" routerLinkActive="active-link">Create Maps</a></li>
+                    <li> <a routerLink="/slidesearch" routerLinkActive="active-link">Search</a></li>-->
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
