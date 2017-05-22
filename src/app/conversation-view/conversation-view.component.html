@@ -1,0 +1,21 @@
+<!--<p>
+    conversation-view works!
+</p>-->
+<!--{{conversation | json}}-->
+<div *ngIf="conversation">
+    <div class="page-header">
+        <h1>{{conversation.name}}</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-4" *ngFor="let slide of conversation.slides">
+            <div class="thumbnail">
+                <img src="api/v1/file/view/{{slide.file}}">
+                <div class="caption">
+                    <!--<h3>Thumbnail label</h3>-->
+                    <p>Position: {{slide.index}}</p>
+                    <p>{{slide.note}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

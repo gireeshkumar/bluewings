@@ -14,18 +14,23 @@ import {DclWrapper} from './wrapper/wrapper.component';
 import { FileUploadModule } from 'ng2-file-upload';
 
 
+import { BackendApiService } from './services/backend-api.service';
+import { ImageServiceService } from './services/image-service.service';
+import { ConversationServiceService } from './services/conversation-service.service';
+
+
 import {TestimonialFeatureModule} from './testimonials/testimonial.feature.module';
 import { NewCmpComponent } from './new-cmp/new-cmp.component';
 import { SlideListComponent } from './slide-list/slide-list.component';
 import { SlideSearchComponent } from './slide-search/slide-search.component';
-import { BackendApiService } from './services/backend-api.service';
-import { ImageServiceService } from './services/image-service.service';
 import { FileuploadComponent } from './fileupload/fileupload.component';
 import { Select2CustomComponent } from './select2-custom/select2-custom.component';
 import { GTostringPipe } from './g-tostring.pipe';
 import { ImagemapeditorComponent } from './imagemapeditor/imagemapeditor.component';
 import { SlideViewComponent } from './slide-view/slide-view.component';
 import { SlideShowComponent } from './slide-show/slide-show.component';
+import { ConversationListComponent } from './conversation-list/conversation-list.component';
+import { ConversationViewComponent } from './conversation-view/conversation-view.component';
 
 
 @NgModule({
@@ -44,7 +49,9 @@ import { SlideShowComponent } from './slide-show/slide-show.component';
         GTostringPipe,
         ImagemapeditorComponent,
         SlideViewComponent,
-        SlideShowComponent
+        SlideShowComponent,
+        ConversationListComponent,
+        ConversationViewComponent
     ],
     imports: [
         BrowserModule,
@@ -56,7 +63,7 @@ import { SlideShowComponent } from './slide-show/slide-show.component';
         FileUploadModule 
     ],
     entryComponents: [CalendarComponent],
-    providers: [appRoutingProviders, SystemJsNgModuleLoader, BackendApiService, ImageServiceService],
+    providers: [appRoutingProviders, SystemJsNgModuleLoader, BackendApiService, ImageServiceService, ConversationServiceService],
     bootstrap: [AppComponent]
 })
 

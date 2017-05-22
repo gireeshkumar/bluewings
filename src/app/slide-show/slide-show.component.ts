@@ -1,9 +1,13 @@
 import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { BackendApiService } from '../services/backend-api.service';
+import { ConversationServiceService } from '../services/conversation-service.service';
 import { HostListener } from '@angular/core';
+import { Conversation } from '../model/conversation';
 
 declare var $:any;
+
+
 
 @Component({
   selector: 'app-slide-show',
@@ -17,15 +21,20 @@ export class SlideShowComponent implements OnInit, AfterViewInit, AfterViewCheck
   parentslide: any;
   alwaysOn = false;
   pluginactivated = false;
+  conversation: Conversation = new Conversation();//dummy
+  conversationIndex = -1;
   
 
-  constructor(private route: ActivatedRoute, private apiservice: BackendApiService) { }
+  constructor(private route: ActivatedRoute, private apiservice: BackendApiService, private convService: ConversationServiceService) { }
 
   ngOnInit() {
     console.log('ngOnInit');
     
     this.route.params.subscribe(
       (params: Params) => {
+
+        this.conversation = new Conversation();
+        this.conversationIndex = -1;
         this.pluginactivated = false;
         this.parentslide = null;
         this.alwaysOn = false;
@@ -74,5 +83,20 @@ export class SlideShowComponent implements OnInit, AfterViewInit, AfterViewCheck
      event.preventDefault();
      this.alwaysOn = !this.alwaysOn;
      $('#myimagemaptest1').maphilight({alwaysOn: this.alwaysOn});
+  }
+
+  saveConversation() {
+    console.log(this.conversation);
+    if(this.conversation.name !== null && this.conversation.name !== undefined){
+      this.conversationIndex = this.convService.saveOrUpdateConversation(this.conversation, this.parentslide, this.conversationIndex);
+    }
+    $('#addToConvModal').modal('hide');
+    this.convService.persistConversation();
+  }
+  addToConversation(){
+    if(this.convService.getCurrentConversation() != null){
+      this.conversation.name = this.convService.getCurrentConversation().name;
+    }
+    $('#addToConvModal').modal('show');
   }
 }

@@ -1,0 +1,7 @@
+<p>
+    conversation-list works!
+</p>
+
+<div *ngFor="let conv of conversations; let i = index">
+    <a routerLink="/conversation/{{conv.key}}" routerLinkActive="active">{{conv.name}}</a>
+</div>

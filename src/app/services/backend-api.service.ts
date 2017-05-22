@@ -38,6 +38,14 @@ public updateCollection(collectionname: string, key: string, data:any) {
       .catch(this.handleError);
 }
 
+
+
+public insertCollection(collectionname: string, data:any) {
+   return this.http.post('/api/v1/data/' + collectionname, data ).toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+}
+
   public getCollection(collectionname: string, key?: string) {
 
     return this.http.get('/api/v1/data/' + collectionname + (key === null || key === undefined ? '' : '/' + key)  ).toPromise()
