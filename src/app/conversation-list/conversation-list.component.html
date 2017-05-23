@@ -1,7 +1,8 @@
-<p>
-    conversation-list works!
-</p>
+<div class="page-header">
+    <h1>Conversation List</h1>
+</div>
 
 <div *ngFor="let conv of conversations; let i = index">
     <a routerLink="/conversation/{{conv.key}}" routerLinkActive="active">{{conv.name}}</a>
+    <button type="button" (click)="deleteConversation(conv.key, index)"><span style="color:red" class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
 </div>

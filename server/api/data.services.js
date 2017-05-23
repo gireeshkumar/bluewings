@@ -92,6 +92,15 @@ router.post('/:collection/:id', function(req, res) {
     collection = dbinstance.collection(collectionname);
     var example = { "_key": req.params.id + '' };
 
+    if (collectionname === 'conversation') {
+        // cleanup
+        if (req.body.slides != null && req.body.slides != undefined) {
+            for (var i = 0; i < req.body.slides.length; i++) {
+                delete req.body.slides[i].file;
+            }
+        }
+    }
+
     collection.byExample(example).then(
         cursor => cursor.map(function(value) {
             return value;
@@ -102,7 +111,36 @@ router.post('/:collection/:id', function(req, res) {
             if (results.length > 0) {
                 var objectoupdate = results[0];
 
-                var objectoupdate = extend(objectoupdate, req.body);
+                //replace for conversation
+                if (collectionname === 'conversation') {
+
+                    if (req.body.merge !== undefined && req.body.merge) {
+                        console.log("Merge conversation");
+                        // objectoupdate = extend(objectoupdate, req.body);
+                        // can only update notes filed now
+                        objectoupdate.name = req.body.name;
+
+                        if (req.body.slides != null && req.body.slides != undefined) {
+                            for (var i = 0; i < req.body.slides.length; i++) {
+                                var slidekey = req.body.slides[i].slide;
+
+                                for (var j = 0; j < objectoupdate.slides.length; j++) {
+                                    console.log("Match= " + objectoupdate.slides[j].slide + " === " + slidekey);
+                                    if (objectoupdate.slides[j].slide === slidekey) {
+                                        objectoupdate.slides[j].note = req.body.slides[i].note;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+
+                    } else {
+                        objectoupdate = req.body;
+                    }
+                } else {
+                    objectoupdate = extend(objectoupdate, req.body);
+                }
 
                 console.log(objectoupdate);
 
@@ -134,6 +172,19 @@ router.get('/metadata', function(req, res) {
 
 });
 
+
+router.delete('/:collection/:id', function(req, res) {
+
+    console.log("Call to => router.get('/:collection/:id')");
+
+    collectionname = req.params.collection;
+    if (['domain', 'category', 'tags', 'slides', 'conversation'].indexOf(collectionname) == -1) {
+        res.send("Unknown collection - " + collectionname);
+    } else {
+        collection = dbinstance.collection(collectionname);
+        collection.removeByKeys([req.params.id]).then(rslt => res.send(rslt), err => res.status(500).send(err));
+    }
+});
 
 
 router.get('/:collection/:id', function(req, res) {

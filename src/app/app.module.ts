@@ -13,6 +13,8 @@ import {CalendarComponent} from './cal/cal.component';
 import {DclWrapper} from './wrapper/wrapper.component';
 import { FileUploadModule } from 'ng2-file-upload';
 
+import {InlineEditorModule} from 'ng2-inline-editor';
+
 
 import { BackendApiService } from './services/backend-api.service';
 import { ImageServiceService } from './services/image-service.service';
@@ -32,6 +34,7 @@ import { SlideShowComponent } from './slide-show/slide-show.component';
 import { ConversationListComponent } from './conversation-list/conversation-list.component';
 import { ConversationViewComponent } from './conversation-view/conversation-view.component';
 
+import { MyComponent } from './inline-editor-demo';
 
 @NgModule({
     declarations: [
@@ -51,7 +54,8 @@ import { ConversationViewComponent } from './conversation-view/conversation-view
         SlideViewComponent,
         SlideShowComponent,
         ConversationListComponent,
-        ConversationViewComponent
+        ConversationViewComponent,
+        MyComponent
     ],
     imports: [
         BrowserModule,
@@ -60,7 +64,8 @@ import { ConversationViewComponent } from './conversation-view/conversation-view
         JsonpModule,
         routing,
         TestimonialFeatureModule,
-        FileUploadModule 
+        FileUploadModule,
+        InlineEditorModule
     ],
     entryComponents: [CalendarComponent],
     providers: [appRoutingProviders, SystemJsNgModuleLoader, BackendApiService, ImageServiceService, ConversationServiceService],

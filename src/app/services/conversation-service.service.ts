@@ -28,7 +28,9 @@ export class ConversationServiceService {
     this.currentconv.name = conv.name;
     return this.currentconv.push(slide.key, conv.currentslide.note, index);
   }
-
+deleteConversation(key){
+  return this.backendApiService.deleteCollection('conversation', key);
+}
 
 updateResult(rslt){
    this.currentconv = new Conversation();
@@ -36,11 +38,14 @@ updateResult(rslt){
    this.currentconv.key = rslt.key;
    this.currentconv.slides = rslt.slides;
 }
+updateConversation(conv){
+  this.backendApiService.updateCollection('conversation', conv.key, conv).then(rslt => console.log('updated:'+rslt) , err => console.log(err));
+}
   persistConversation() {
     if (this.currentconv != null) {
       delete this.currentconv.currentslide;
       if (this.currentconv.key != null && this.currentconv.key != undefined) {
-        this.backendApiService.updateCollection('conversation', this.currentconv.key, this.currentconv).then(rslt => console.log('updated:'+rslt) , err => console.log(err));
+        this.updateConversation( this.currentconv);
       } else {
         this.backendApiService.insertCollection('conversation', this.currentconv).then(rslt => this.updateResult(rslt), err => console.log(err));
       }

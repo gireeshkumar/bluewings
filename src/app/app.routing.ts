@@ -13,6 +13,8 @@ import { SlideShowComponent } from './slide-show/slide-show.component';
 import { ConversationListComponent } from './conversation-list/conversation-list.component';
 import { ConversationViewComponent } from './conversation-view/conversation-view.component';
 
+import { MyComponent } from './inline-editor-demo';
+
 const appRoutes: Routes = [
     { path: 'designer', component: HomeComponent },
     { path: '', component: AboutComponent },
@@ -26,7 +28,9 @@ const appRoutes: Routes = [
     { path: 'slideshow', component: SlideShowComponent },
     { path: 'slideshow/:id', component: SlideShowComponent },
     { path: 'conversations', component: ConversationListComponent },
-    { path: 'conversation/:id', component: ConversationViewComponent }
+    { path: 'conversation/:id', component: ConversationViewComponent },
+    { path: 'editordemo', component: MyComponent }
+    
 
 ];
 

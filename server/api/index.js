@@ -10,5 +10,6 @@ router.get('/', function(req, res) {
 
 router.use("/file", require("./file.services"));
 router.use("/data", require("./data.services"));
+router.use("/pdf", require("./pdf.service"));
 
 module.exports = router

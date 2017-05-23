@@ -14,10 +14,17 @@ export class ConversationListComponent implements OnInit {
   constructor(private convService: ConversationServiceService) { }
 
   ngOnInit() {
+    this.loadconversations();
+  }
+  loadconversations() {
     this.convService.listConversations()
       .then(
       list => this.conversations = list,
       error => this.errorMessage = <any>error
       );
+  }
+  deleteConversation(key, index) {
+    this.convService.deleteConversation(key)
+      .then(rslt => this.loadconversations());
   }
 }

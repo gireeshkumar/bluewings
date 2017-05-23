@@ -32,6 +32,15 @@ export class BackendApiService {
     return this.jsondata;
   }
 
+
+public deleteCollection(collectionname: string, key?: string) {
+
+    return this.http.delete('/api/v1/data/' + collectionname + (key === null || key === undefined ? '' : '/' + key)  ).toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+
+  }
+
 public updateCollection(collectionname: string, key: string, data:any) {
    return this.http.post('/api/v1/data/' + collectionname +  '/' + key , data ).toPromise()
       .then(this.extractData)
