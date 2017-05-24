@@ -1,25 +1,8 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-md-8">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="custom-search-input">
-                        <div class="input-group col-md-12">
-                            <input type="text" class="form-control input-lg" placeholder="Search by keywords" [(ngModel)]="searchkeywords" (keyup)="doSearch()" />
-                            <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="button" (click)="doSearch()">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- search component end -->
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
 
             <div class="panel-group">
                 <div class="panel panel-default">
@@ -52,40 +35,7 @@
                                     </div>
                                 </div>
 
-                                <!--<div class="col-md-12">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><a data-toggle="collapse" href="#domainbody">Domains</a></div>
-                                        <div class="panel-body" id="domainbody">
 
-                                            <div class="form-group badge-checkboxes">
-                                                <div>
-                                                    <label class="checkbox-inline" *ngFor="let dms of metadata.domain">
-                                                        <input type="checkbox" value="{{dms.name}}"/>
-                                                        <span class="badge">{{dms.name}}</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>-->
-                                <!--<div class="col-md-12">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><a data-toggle="collapse" href="#tagsbody">Tags</a></div>
-                                        <div class="panel-body" id="tagsbody">
-
-                                <div class="form-group badge-checkboxes">
-                                    <div>
-                                        <label class="checkbox-inline" *ngFor="let tag of metadata.tags">
-                                                        <input type="checkbox" value="{{tag.name}}"/>
-                                                        <span class="badge">{{tag.name}}</span>
-                                                    </label>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>-->
                             </div>
                         </div>
                     </div>
@@ -94,32 +44,61 @@
 
             <!-- filter component end -->
         </div>
-    </div>
 
 
 
 
+        <div class="col-md-9">
 
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="form-control input-lg" placeholder="Search by keywords" [(ngModel)]="searchkeywords" (keyup)="doSearch()" />
+                            <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button" (click)="doSearch()">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                        </div>
+                    </div>
+                </div>
 
-</div>
-<div *ngFor="let slide of slides; let i = index">
-    <div class="clearfix" *ngIf="i % 3 == 0"></div>
-    <div class="col-md-4 col-sm-6 col-12">
-        <div class="thumbnail" [ngClass]="{'alert alert-info': isSelected(slide)}">
-            <img class="group list-group-image well well-sm" src="api/v1/file/view/{{slide.file}}" (click)="selectItem(slide)" *ngIf="viewtype !== 'default'" />
+                <div class="col-md-12">
+                    <!-- Search result -->
+                    <div *ngFor="let slide of slides; let i = index">
+                        <div class="clearfix" *ngIf="i % 3 == 0"></div>
+                        <div class="col-md-4 col-sm-6 col-12">
+                            <div class="thumbnail" [ngClass]="{'alert alert-info': isSelected(slide)}">
+                                <img class="group list-group-image well well-sm" src="api/v1/file/view/{{slide.file}}" (click)="selectItem(slide)" *ngIf="viewtype !== 'default'" />
 
-            <a routerLink="/slideshow/{{slide.key}}" routerLinkActive="active" *ngIf="viewtype === 'default'">
-                <img class="group list-group-image well well-sm" src="api/v1/file/view/{{slide.file}}" />
-            </a>
+                                <a routerLink="/slideshow/{{slide.key}}" routerLinkActive="active" *ngIf="viewtype === 'default'">
+                                    <img class="group list-group-image well well-sm" src="api/v1/file/view/{{slide.file}}" />
+                                </a>
 
-            <button type="button" class="btn btn-success btn-s" (click)="createLink(slide)" *ngIf="viewtype === 'default'">
-                <span class="glyphicon glyphicon-upload"></span> Link 
-            </button>
-            <button type="button" class="btn btn-success btn-s" (click)="viewLink(slide)" *ngIf="viewtype === 'default'">
-                <span class="glyphicon glyphicon-upload"></span> View 
-            </button>
+                                <button type="button" class="btn btn-success btn-s" (click)="createLink(slide)" *ngIf="viewtype === 'default'">
+                                    <span class="glyphicon glyphicon-upload"></span> Link 
+                                </button>
+                                <button type="button" class="btn btn-success btn-s" (click)="viewLink(slide)" *ngIf="viewtype === 'default'">
+                                    <span class="glyphicon glyphicon-upload"></span> View 
+                                </button>
 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- slide end -->
 
+                </div>
+            </div>
+            <!-- search component end -->
         </div>
+
+
     </div>
+
+
+
+
+
+
 </div>

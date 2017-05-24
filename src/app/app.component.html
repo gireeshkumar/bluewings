@@ -18,13 +18,11 @@
                 <ul class="nav navbar-nav">
 
                     <li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/']">About</a></li>
-                    <li role="presentation" routerLinkActive="active"><a [routerLink]="['/designer']">Designer</a></li>
                     <li role="presentation" routerLinkActive="active"><a [routerLink]="['/fileupload']">FileUpload</a></li>
                     <!--<li role="presentation" routerLinkActive="active"><a [routerLink]="['/mapeditor']">Create Maps</a></li>-->
                     <li role="presentation" routerLinkActive="active"><a [routerLink]="['/slidesearch']">Search</a></li>
                     <li role="presentation" routerLinkActive="active"><a [routerLink]="['/conversations']">Conversations</a></li>
 
-                    <li role="presentation" routerLinkActive="active"><a [routerLink]="['/editordemo']">Editor Demo</a></li>
 
 
 
@@ -45,7 +43,7 @@
     </nav>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid" id="parentBaseContainer">
 
     <router-outlet></router-outlet>
 

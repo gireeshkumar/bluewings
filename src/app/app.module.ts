@@ -12,7 +12,7 @@ import {UsersComponent} from './users/users.component';
 import {CalendarComponent} from './cal/cal.component';
 import {DclWrapper} from './wrapper/wrapper.component';
 import { FileUploadModule } from 'ng2-file-upload';
-
+import { DragulaModule } from 'ng2-dragula';
 import {InlineEditorModule} from 'ng2-inline-editor';
 
 
@@ -62,6 +62,7 @@ import { MyComponent } from './inline-editor-demo';
         FormsModule,
         HttpModule,
         JsonpModule,
+        DragulaModule,
         routing,
         TestimonialFeatureModule,
         FileUploadModule,

@@ -2,6 +2,7 @@
     conversation-view works!
 </p>-->
 <!--{{conversation | json}}-->
+<div id="imageZoonContainer"></div>
 <div *ngIf="conversation">
     <div class="page-header">
         <h1>
@@ -16,11 +17,11 @@
         </a>
 
     </div>
-    <div class="row">
-        <div class="col-sm-6 col-md-4" *ngFor="let slide of conversation.slides; let i = index">
+    <div class="row" [dragula]='"first-bag"' [dragulaModel]='slides'>
+        <div class="col-xs-6 col-md-3" *ngFor="let slide of slides; let i = index">
             <div class="thumbnail">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="deleteSlide(slide, index)"><span style="color:red" class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-                <img src="api/v1/file/view/{{slide.file}}">
+                <img src="api/v1/file/view/{{slide.file}}" class="gallery-items">
                 <div class="caption">
                     <!--<h3>Thumbnail label</h3>-->
                     <!--<p>Position: {{slide.index}}</p>-->

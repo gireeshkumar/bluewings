@@ -112,8 +112,35 @@ function saveSlide(data) {
             console.log("Save Edge - Tags" + tagkeys);
             saveEdges({ value: 'Tags -> Slide', from: 'tags', to: 'slide' }, slidekey, tagkeys);
 
+
+
+
+            // res.send('Find collection [' + collectionname + '] by id[' + req.params.id + '] ');
+            collection = dbinstance.collection('slides');
+
+            var example = { "_key": slidekey + '' };
+
+
+            collection.byExample(example).then(
+                cursor => cursor.map(function(value) {
+                    return value;
+                })
+            ).then(
+                results => {
+                    var record = results[0];
+                    record._categories = catkeys;
+                    record._tags = tagkeys;
+                    record._domains = domainkeys;
+
+                    collection.updateByExample(example, record).then(result => console.log(result));
+                },
+                err => console.error('Failed to fetch all documents:', err)
+            );
+
             data.key = slidekey;
             resolve(data);
+            // update slide instance with other references
+
         });
     });
 

@@ -17,6 +17,89 @@ router.get('/', function(req, res) {
 // 950
 //http://192.168.99.100:3000/api/v1/data/slides/search?f=searchcontent&q=parnter
 //
+router.get("/search/slides/q", function(req, res) {
+    /*
+    FOR i IN FULLTEXT(slides, "searchcontent", "edgeops")
+
+    FOR cat IN category 
+        FILTER cat.name == "design" 
+        FILTER POSITION(i._categories, cat._key) == true // Join
+
+    FOR tag IN tags 
+        FILTER tag.name == "edgeops" // Filter by name
+        FILTER POSITION(i._tags, tag._key) == true // Join
+
+    FOR dmn IN domain // Then Loop on all categories
+        FILTER dmn.name == "communication" || dmn.name == "healthcare" // Filter by name
+        FILTER POSITION(i._domains, dmn._key) == true // Join
+
+
+    RETURN i
+    */
+
+
+    var domains = req.query.d;
+    var tags = req.query.t;
+    var cats = req.query.c;
+    var keywords = req.query.q;
+
+    // building query
+
+    var AQL = 'FOR i IN ' + ((keywords != null && keywords != undefined) ? 'FULLTEXT(slides, "searchcontent", "' + keywords + '")' : 'slides') +
+        filterScript('_domains', domains, 'domain', 'dmn') +
+        filterScript('_tags', tags, 'tags', 'tag') +
+        filterScript('_categories', cats, 'category', 'cat') +
+        ` 
+    RETURN DISTINCT i`;
+
+
+    console.log(AQL);
+
+    // res.send(AQL);
+
+    dbinstance.query(AQL)
+        .then(
+            cursor => cursor.map(function(value) {
+                return toCollectionObject(value);
+            })
+        ).then(
+            results => res.send((results.length > 0 ? (results.length == 1 ? results[0] : results) : [])),
+            err => res.status(500).send('Failed to fetch all documents:' + err)
+        );
+
+
+});
+
+function filterScript(fkkey, values, colname, colcode) {
+    //TODO handle comma separated value  , OR condition
+
+    // (tag.name == "tag3" || "d4h" || "v4g")
+
+    var aql = '';
+
+
+    if (values != null && values != undefined) {
+
+        var arr = values.split(',');
+        var vals = '';
+        for (var i = 0; i < arr.length; i++) {
+            if (i != 0) {
+                vals += ' || ';
+            }
+            vals += '"' + arr[i] + '"';
+        }
+
+        aql = `
+           FOR ` + colcode + ` IN ` + colname + `
+         FILTER (` + colcode + `.name == ` + vals + `)
+         FILTER POSITION(i.` + fkkey + `, ` + colcode + `._key) == true
+        `
+    }
+
+
+    return aql;
+}
+
 router.get('/search/:collection', function(req, res) {
     collectionname = req.params.collection;
     console.log("Query on collection -" + collectionname);
@@ -34,6 +117,8 @@ router.get('/search/:collection', function(req, res) {
         err => console.error('Failed to fetch all documents:', err)
     );
 });
+
+
 
 
 
@@ -123,11 +208,21 @@ router.post('/:collection/:id', function(req, res) {
                         if (req.body.slides != null && req.body.slides != undefined) {
                             for (var i = 0; i < req.body.slides.length; i++) {
                                 var slidekey = req.body.slides[i].slide;
+                                var idx = req.body.slides[i].index;
+                                var nte = req.body.slides[i].note;
 
                                 for (var j = 0; j < objectoupdate.slides.length; j++) {
                                     console.log("Match= " + objectoupdate.slides[j].slide + " === " + slidekey);
                                     if (objectoupdate.slides[j].slide === slidekey) {
-                                        objectoupdate.slides[j].note = req.body.slides[i].note;
+
+                                        if (nte != null && nte != undefined) {
+                                            objectoupdate.slides[j].note = nte;
+                                        }
+                                        if (idx != null && idx != undefined) {
+                                            objectoupdate.slides[j].index = idx;
+                                        }
+
+
                                         break;
                                     }
                                 }
