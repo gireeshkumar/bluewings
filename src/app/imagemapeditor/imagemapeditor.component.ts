@@ -8,7 +8,7 @@ declare var $: any;
 declare var generateCode: any;
 declare var resetImageMapper:any;
 
-
+// using https://github.com/1npy0/easy-mapper
 @Component({
   selector: 'app-imagemapeditor',
   templateUrl: './imagemapeditor.component.html',
