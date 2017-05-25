@@ -2,7 +2,23 @@
     <h1>Conversation List</h1>
 </div>
 
-<div *ngFor="let conv of conversations; let i = index">
+<!--<div *ngFor="let conv of conversations; let i = index">
     <a routerLink="/conversation/{{conv.key}}" routerLinkActive="active">{{conv.name}}</a>
     <button type="button" (click)="deleteConversation(conv.key, index)"><span style="color:red" class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+</div>-->
+
+
+<div class="row">
+    <div class="col-xs-6 col-md-3">
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let conv of conversations; let i = index">
+                <span class="pull-right">
+                <button type="button" (click)="deleteConversation(conv.key, i)">
+                    <span style="color:red" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+                </span>
+                <a routerLink="/conversation/{{conv.key}}" routerLinkActive="active">{{conv.name}}</a>
+            </li>
+        </ul>
+    </div>
 </div>

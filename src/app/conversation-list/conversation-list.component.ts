@@ -24,7 +24,11 @@ export class ConversationListComponent implements OnInit {
       );
   }
   deleteConversation(key, index) {
-    this.convService.deleteConversation(key)
-      .then(rslt => this.loadconversations());
+
+    var r = confirm('Are you sure you want to delete this conversation - '+this.conversations[index].name);
+      if (r == true) {
+          this.convService.deleteConversation(key)
+            .then(rslt => this.loadconversations());
+      }
   }
 }

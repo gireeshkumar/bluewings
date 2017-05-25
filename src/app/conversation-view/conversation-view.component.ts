@@ -66,6 +66,11 @@ export class ConversationViewComponent implements OnInit , AfterViewChecked{
 
   }
 
+  addSlides(){
+     this.convService.currentConversation = this.conversation;
+     this.router.navigate(['/slidesearch']);
+  }
+
   private onDrop(args) {
     let [e, el] = args;
     // do something

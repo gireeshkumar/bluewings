@@ -302,7 +302,7 @@ RETURN merge(conv, {slides:a})
 
             dbinstance.query(`FOR conv IN conversation  FILTER conv._key == '` + req.params.id + `'
                         LET a = (FOR c in conv.slides 
-                                    FOR a IN slides FILTER c.slide == a._key RETURN {"key":a._key, "file":a.file, "note":c.note, "index":c.index}) 
+                                    FOR a IN slides FILTER c.slide == a._key RETURN {"key":a._key, "slide":a._key, "file":a.file, "note":c.note, "index":c.index}) 
                         RETURN merge(conv, {slides:a})`)
                 .then(
                     cursor => cursor.map(function(value) {
@@ -355,7 +355,7 @@ FOR conv IN conversation
     if (collectionname === "conversation") {
         dbinstance.query(`FOR conv IN conversation
                              LET a = (FOR c in conv.slides 
-                            FOR a IN slides FILTER c.slide == a._key RETURN {"key":a._key, "file":a.file, "note":c.note}) 
+                            FOR a IN slides FILTER c.slide == a._key RETURN {"key":a._key, "slide":a._key, "file":a.file, "note":c.note, "index":c.index}) 
                             RETURN merge(conv, {slides:a})`)
             .then(
                 cursor => cursor.map(function(value) {

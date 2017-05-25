@@ -35,8 +35,20 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" name="convname" id="exampleInputEmail1" placeholder="Conversation Name" [(ngModel)]="conversation.name">
+                        <label for="exampleInputEmail1">{{type == 'new' ? 'New Conversation Name' : 'Select existing conversation'}}</label>
+
+                        <div class="input-group" *ngIf="type!='new'">
+                            <select name="convselect" class="form-control" [ngModel]="selectedConv" (ngModelChange)="onConvChange($event)">
+                                <option [value]="i" *ngFor="let conv of conversations; let i = index">{{conv.name}}</option>
+                            </select>
+                            <a class="input-group-addon" id="basic-addon2" (click)="makeNewConv()" alt="Create new Conversation" title="Create new conversation"><span style="color:green" class="glyphicon glyphicon-file" aria-hidden="true" ></span></a>
+                        </div>
+
+                        <div class="input-group" *ngIf="type=='new'">
+                            <input type="text" class="form-control" name="convname" id="exampleInputEmail1" placeholder="Conversation Name" [(ngModel)]="conversation.name">
+                            <a class="input-group-addon" id="basic-addon2" (click)="cancelMakeNewConv()"><span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                        </div>
+
                         <p class="help-block">Required. Name of the conversation. Can also edit existing name</p>
                     </div>
                     <div class="form-group">

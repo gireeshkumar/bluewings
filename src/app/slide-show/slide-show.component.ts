@@ -5,7 +5,7 @@ import { ConversationServiceService } from '../services/conversation-service.ser
 import { HostListener } from '@angular/core';
 import { Conversation } from '../model/conversation';
 
-declare var $:any;
+declare var $: any;
 
 
 
@@ -21,17 +21,22 @@ export class SlideShowComponent implements OnInit, AfterViewInit, AfterViewCheck
   parentslide: any;
   alwaysOn = false;
   pluginactivated = false;
-  conversation: Conversation = new Conversation();//dummy
+  conversation: Conversation = new Conversation();// dummy
   conversationIndex = -1;
-  
+  type:string = 'existing';
+  conversations:any;
+  selectedConv:any;
+
 
   constructor(private route: ActivatedRoute, private apiservice: BackendApiService, private convService: ConversationServiceService) { }
 
   ngOnInit() {
     console.log('ngOnInit');
-    
+
     this.route.params.subscribe(
       (params: Params) => {
+
+        this.loadconversations();
 
         this.conversation = new Conversation();
         this.conversationIndex = -1;
@@ -57,11 +62,34 @@ export class SlideShowComponent implements OnInit, AfterViewInit, AfterViewCheck
     );
   }
 
+  onConvChange(newValue){
+    console.log(newValue);
+    this.selectedConv = this.conversations[parseInt(newValue)];
+    this.convService.currentConversation = this.selectedConv;
+  }
+
+  loadconversations() {
+    console.log("Load conversations");
+    this.convService.listConversations()
+      .then(
+      list => this.conversations = list,
+      error => this.errorMessage = <any>error
+      );
+  }
+
    @HostListener('window:popstate', ['$event'])
   onPopState(event) {
     console.log('Back button pressed');
   }
 
+  makeNewConv(){
+    this.selectedConv = null;
+    this.convService.currentConversation = null;
+    this.type = 'new';
+  }
+  cancelMakeNewConv(){
+    this.type = 'existing';
+  }
   getSlideImage(slide) {
     return (slide === null || slide === undefined ? '' : 'api/v1/file/view/' + this.parentslide.file);
   }
@@ -87,15 +115,30 @@ export class SlideShowComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   saveConversation() {
     console.log(this.conversation);
-    if(this.conversation.name !== null && this.conversation.name !== undefined){
-      this.conversationIndex = this.convService.saveOrUpdateConversation(this.conversation, this.parentslide, this.conversationIndex);
+
+    let curconv;
+    if(this.selectedConv != null && this.selectedConv != undefined){
+      curconv = this.selectedConv;
+    }else{
+      if(this.conversation.name !== null && this.conversation.name !== undefined){
+          curconv = this.conversation;
+      }else {
+        alert('Please enter a new conversation name or select existing conversation');
+        return;
+      }
     }
+
+    this.conversationIndex = this.convService.saveOrUpdateConversation(curconv.name, this.conversation.currentslide.note, this.parentslide, this.conversationIndex);
+
+    // if(this.conversation.name !== null && this.conversation.name !== undefined){
+    //   this.conversationIndex = this.convService.saveOrUpdateConversation(this.conversation, this.parentslide, this.conversationIndex);
+    // }
     $('#addToConvModal').modal('hide');
     this.convService.persistConversation();
   }
   addToConversation(){
-    if(this.convService.getCurrentConversation() != null){
-      this.conversation.name = this.convService.getCurrentConversation().name;
+    if (this.convService.currentConversation != null){
+      this.conversation.name = this.convService.currentConversation.name;
     }
     $('#addToConvModal').modal('show');
   }
