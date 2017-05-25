@@ -12,12 +12,12 @@ export class SlideListComponent implements OnInit, OnChanges {
   slides: any;
   errorMessage: any;
 
- @Input() viewtype = 'default';
+  @Input() viewtype = 'default';
   @Input() selectedSlide: any;
   @Input() selectedSlideKey: any;
   @Output() selectedSlideChange: EventEmitter<Object> = new EventEmitter<Object>();
   searchkeywords: string;
-  metadata:any = [];
+  metadata: any = [];
 
   constructor(private apiservice: BackendApiService, private ref: ChangeDetectorRef, private router: Router) {
   }
@@ -30,12 +30,12 @@ export class SlideListComponent implements OnInit, OnChanges {
 
   }
 
-  initMetadata(results){
+  initMetadata(results) {
     this.metadata = [
-          {type:"Categories", list: results.categories},
-          {type:"Domains", list: results.domain},
-          {type:"Tags", list: results.tags}
-      ];
+      { type: 'Categories', list: results.categories },
+      { type: 'Domains', list: results.domain },
+      { type: 'Tags', list: results.tags }
+    ];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -73,7 +73,7 @@ export class SlideListComponent implements OnInit, OnChanges {
         this.selectedSlide = null;
 
       } else {
-        this.selectItem(changes['selectedSlide'].currentValue)
+        this.selectItem(changes['selectedSlide'].currentValue);
       }
     }
 
@@ -81,14 +81,14 @@ export class SlideListComponent implements OnInit, OnChanges {
 
 
 
-createLink(slide){
-  this.router.navigate(['/mapeditor', slide.key]);
-}
-viewLink(slide){
-   this.router.navigate(['/slideshow', slide.key]);
-}
+  createLink(slide) {
+    this.router.navigate(['/mapeditor', slide.key]);
+  }
+  viewLink(slide) {
+    this.router.navigate(['/slideshow', slide.key]);
+  }
   selectItem(slide) {
-    if(this.viewtype === 'default'){
+    if (this.viewtype === 'default') {
       return;
     }
 
@@ -105,63 +105,82 @@ viewLink(slide){
     return slide.selected;
   }
 
-   delay = (function(){
-      var timer = 0;
-      return function(callback, ms){
-        clearTimeout (timer);
-        timer = setTimeout(callback, ms);
-      };
-    })();
+  delay = (function () {
+    var timer = 0;
+    return function (callback, ms) {
+      clearTimeout(timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
 
-  doSearch(){
+  doSearch() {
     const thisobj = this.apiservice;
-    this.delay(()=>{
-         // searchCollection(collectionname: string, field: string, query: string) {
-          this._doSearchImpl();
-        }, 1000 );
+    this.delay(() => {
+      // searchCollection(collectionname: string, field: string, query: string) {
+      this._doSearchImpl();
+    }, 1000);
   }
 
-  updateFilterChanges(event){
-     this.doSearch();
+  updateFilterChanges(event) {
+    this.doSearch();
   }
 
-  filterSelectedMetadata(){
+  filterSelectedMetadata() {
 
-      var filteredmetadata = [];
+    const mapping = [];
+    mapping['categories'] = 'c';
+    mapping['tags'] = 't';
+    mapping['domains'] = 'd';
 
-      for(var i = 0 ; i  < this.metadata.length; i++){
+    // var filteredmetadata = [];
+    var queryparts = [];
 
-          var selecteditems = [];
+    for (var i = 0; i < this.metadata.length; i++) {
 
-          for(var j = 0; j < this.metadata[i].list.length; j++){
+      var selecteditems = [];
 
-            if(this.metadata[i].list[j].selected){
-              selecteditems.push(this.metadata[i].list[j]);
-            }
 
-          }
+      for (let j = 0; j < this.metadata[i].list.length; j++) {
 
-          filteredmetadata.push( {type: this.metadata[i].type,  list: selecteditems} );
+        if (this.metadata[i].list[j].selected) {
+          selecteditems.push(this.metadata[i].list[j].name);
+        }
 
       }
-    return filteredmetadata;
+
+      if (selecteditems.length > 0) {
+        // filteredmetadata.push({ type: this.metadata[i].type, list: selecteditems });
+        queryparts.push(mapping[this.metadata[i].type.toLowerCase()] + '=' + selecteditems.join(','));
+      }
+
+
+    }
+    return queryparts.join('&');
   }
 
 
-  _doSearchImpl(){
+  _doSearchImpl() {
 
-    console.log("_doSearchImpl===_doSearchImpl");
+    console.log('_doSearchImpl===_doSearchImpl');
 
-    console.log("filters changed");
-    console.log(this.filterSelectedMetadata());
+    let filters = this.filterSelectedMetadata().trim();
+    console.log('filters changed');
+    console.log(filters);
 
-      if(this.searchkeywords != null && this.searchkeywords !== undefined){
-        console.log("fire search to server");
-          this.apiservice.searchCollection('slides', 'searchcontent', this.searchkeywords)
-                  .then(
-                  slides => { this.slides = slides; },
-                  error => this.errorMessage = <any>error);
-      }
+    const qstring = ( ( (this.searchkeywords != null && this.searchkeywords !== undefined) ? 'q=' + this.searchkeywords : '' ) + filters ).trim();
+    console.log('Query string:::' + qstring);
+
+    if (qstring.length > 0) {
+      console.log('fire search to server');
+      // /search/slides/q
+
+      this.apiservice.searchSlides(qstring)
+        .then(
+        slides => { this.slides = slides; },
+        error => this.errorMessage = <any>error);
+    }else{
+      this.slides = [];
+    }
 
   }
 }

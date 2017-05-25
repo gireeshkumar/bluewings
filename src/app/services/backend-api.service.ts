@@ -33,50 +33,57 @@ export class BackendApiService {
   }
 
 
-public deleteCollection(collectionname: string, key?: string) {
+  public deleteCollection(collectionname: string, key?: string) {
 
-    return this.http.delete('/api/v1/data/' + collectionname + (key === null || key === undefined ? '' : '/' + key)  ).toPromise()
+    return this.http.delete('/api/v1/data/' + collectionname + (key === null || key === undefined ? '' : '/' + key)).toPromise()
       .then(this.extractData)
       .catch(this.handleError);
 
   }
 
-public updateCollection(collectionname: string, key: string, data:any) {
-   return this.http.post('/api/v1/data/' + collectionname +  '/' + key , data ).toPromise()
+  public updateCollection(collectionname: string, key: string, data: any) {
+    return this.http.post('/api/v1/data/' + collectionname + '/' + key, data).toPromise()
       .then(this.extractData)
       .catch(this.handleError);
-}
+  }
 
 
 
-public insertCollection(collectionname: string, data:any) {
-   return this.http.post('/api/v1/data/' + collectionname, data ).toPromise()
+  public insertCollection(collectionname: string, data: any) {
+    return this.http.post('/api/v1/data/' + collectionname, data).toPromise()
       .then(this.extractData)
       .catch(this.handleError);
-}
+  }
 
   public getCollection(collectionname: string, key?: string) {
 
-    return this.http.get('/api/v1/data/' + collectionname + (key === null || key === undefined ? '' : '/' + key)  ).toPromise()
+    return this.http.get('/api/v1/data/' + collectionname + (key === null || key === undefined ? '' : '/' + key)).toPromise()
       .then(this.extractData)
       .catch(this.handleError);
 
   }
 
-    public getMetadata() {
+  public getMetadata() {
 
-    return this.http.get('/api/v1/data/metadata'  ).toPromise()
+    return this.http.get('/api/v1/data/metadata').toPromise()
       .then(this.extractData)
       .catch(this.handleError);
 
   }
 
+  //http://192.168.99.100:3000/api/v1/data/search/slides/q?q=innovation&t=tag3,d4h&c=portal,edge-ops
+  public searchSlides(querystring: string) {
+    return this.http.get('/api/v1/data/search/slides/q?' + querystring).toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+  }
 
-    public searchCollection(collectionname: string, field: string, query: string) {
+
+  public searchCollection(collectionname: string, field: string, query: string) {
 
     // http://192.168.99.100:3000/api/v1/data/search/slides?q=healthcare&f=searchcontent
 
-    return this.http.get('/api/v1/data/search/' + collectionname + '?f=' + field + '&q=' + query  ).toPromise()
+    return this.http.get('/api/v1/data/search/' + collectionname + '?f=' + field + '&q=' + query).toPromise()
       .then(this.extractData)
       .catch(this.handleError);
 
@@ -89,7 +96,7 @@ public insertCollection(collectionname: string, data:any) {
     const body = slides;//JSON.stringify(slides);
     // return this.http.post('/save', body, headers).map((res: Response) => res.json());
 
-    return  this.http.post('/api/v1/file/save', body, headers).toPromise()
+    return this.http.post('/api/v1/file/save', body, headers).toPromise()
       .then(this.extractData)
       .catch(this.handleError);
   }

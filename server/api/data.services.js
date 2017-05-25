@@ -63,7 +63,7 @@ router.get("/search/slides/q", function(req, res) {
                 return toCollectionObject(value);
             })
         ).then(
-            results => res.send((results.length > 0 ? (results.length == 1 ? results[0] : results) : [])),
+            results => res.send(results),
             err => res.status(500).send('Failed to fetch all documents:' + err)
         );
 
