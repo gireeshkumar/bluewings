@@ -199,11 +199,11 @@ function saveSlideCollection(data) {
 
         collection = dbinstance.collection("slides");
 
-        const slideobj = { file: data.filename, originalname: data.originalname, desc: data.desc };
+        const slideobj = { file: data.filename, originalname: data.originalname, title: data.title };
         slideobj.categories = getTextAttr(data.category);
         slideobj.tags = getTextAttr(data.tags);
         slideobj.domains = getTextAttr(data.domain);
-        slideobj.searchcontent = slideobj.categories + ' ' + slideobj.tags + ' ' + slideobj.domains + ' ' + slideobj.desc;
+        slideobj.searchcontent = slideobj.categories + ' ' + slideobj.tags + ' ' + slideobj.domains + ' ' + slideobj.title;
 
         collection.save(slideobj).then(
             meta => {

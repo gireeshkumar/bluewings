@@ -4,6 +4,7 @@ import { BackendApiService } from '../services/backend-api.service';
 import { ConversationServiceService } from '../services/conversation-service.service';
 import { HostListener } from '@angular/core';
 import { Conversation } from '../model/conversation';
+import { SlideStackService } from '../services/slide-stack.service';
 
 declare var $: any;
 
@@ -28,7 +29,10 @@ export class SlideShowComponent implements OnInit, AfterViewInit, AfterViewCheck
   selectedConv:any;
 
 
-  constructor(private route: ActivatedRoute, private apiservice: BackendApiService, private convService: ConversationServiceService) { }
+  constructor(private route: ActivatedRoute, 
+              private apiservice: BackendApiService,
+              private convService: ConversationServiceService,
+              private slideStack: SlideStackService) { }
 
   ngOnInit() {
     console.log('ngOnInit');
@@ -46,12 +50,24 @@ export class SlideShowComponent implements OnInit, AfterViewInit, AfterViewCheck
         console.log('route.params.subscribe');
         console.log(params);
 
-        this.slidekey = params['id'];
+        // this.slidekey = params['id'];
+        var keys = params['id'].split(';');
+        this.slidekey = keys[0];
+        if(keys.length > 1){
+          var pslide = keys[1].split('=')[1];
+          if(pslide === '-1'){
+            // reset till here
+            this.slideStack.reset(this.slidekey);
+          }
+        }else{
+          this.slideStack.reset();
+        }
         if (this.slidekey != null && this.slidekey != undefined) {
           this.apiservice.getCollection('slides', this.slidekey)
             .then(
             slide => {
               this.parentslide = slide;
+              this.slideStack.push(slide);
               // setTimeout(function(){ $('#myimagemaptest1').rwdImageMaps(); }, 100);
             },
             error => this.errorMessage = <any>error

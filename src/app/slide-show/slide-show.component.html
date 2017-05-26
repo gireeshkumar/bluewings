@@ -10,11 +10,19 @@
     <button type="button" class="btn btn-primary btn-s" data-toggle="modal" (click)="addToConversation()">
   Add to conversation 
 </button>
+    <h3>{{parentslide.title}}</h3>
+
+    <ol class="breadcrumb">
+        <li *ngFor="let slide of slideStack.slides; let last = last" [ngClass]="{ 'active': last }">
+            <a routerLink="/slideshow/{{slide.key}};p=-1" *ngIf="!last">{{slide.title}}</a>
+            <span *ngIf="last">{{slide.title}}</span>
+        </li>
+    </ol>
 
     <img id="myimagemaptest1" class="img-responsive" src="{{getSlideImage(parentslide)}}" alt="Infografik1" usemap="#imagemap1">
     <map id="imagemap1" name="imagemap1" *ngIf="parentslide.map">
 
-      <area  *ngFor="let area of parentslide.map; let i = index" routerLink="/slideshow/{{area.link}}" class="areacomp"
+      <area  *ngFor="let area of parentslide.map; let i = index" routerLink="/slideshow/{{area.link}};p={{parentslide.key}}" class="areacomp"
             shape="rect"
             coords="{{area.coords.sx}}, {{area.coords.sy}}, {{area.coords.ex}}, {{area.coords.ey}}" />
       <!-- <area alt="" title="" href="JavaScript:alert('Clicked on : Box 2')" shape="rect" coords="594,280,730,390" /> -->

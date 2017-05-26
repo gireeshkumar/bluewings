@@ -19,6 +19,7 @@ import {InlineEditorModule} from 'ng2-inline-editor';
 import { BackendApiService } from './services/backend-api.service';
 import { ImageServiceService } from './services/image-service.service';
 import { ConversationServiceService } from './services/conversation-service.service';
+import { SlideStackService } from './services/slide-stack.service';
 
 
 import {TestimonialFeatureModule} from './testimonials/testimonial.feature.module';
@@ -69,7 +70,14 @@ import { MyComponent } from './inline-editor-demo';
         InlineEditorModule
     ],
     entryComponents: [CalendarComponent],
-    providers: [appRoutingProviders, SystemJsNgModuleLoader, BackendApiService, ImageServiceService, ConversationServiceService],
+    
+    providers: [appRoutingProviders, 
+                SystemJsNgModuleLoader, 
+                BackendApiService, 
+                ImageServiceService, 
+                ConversationServiceService, 
+                SlideStackService],
+
     bootstrap: [AppComponent]
 })
 

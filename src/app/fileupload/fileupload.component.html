@@ -124,8 +124,9 @@
 
                 <form>
                     <div class="form-group">
-                        <label for="email">Description</label>
-                        <input type="text" [(ngModel)]="file.desc" name="description">
+                        <label for="email">Title/Name</label>
+                        <input type="text" class="form-control" [(ngModel)]="file.title" name="description">
+                        <p class="help-block">Required. Title or name of the slides, used when navigation/slide show</p>
                     </div>
                     <div class="form-group">
                         <label for="email">Category</label>

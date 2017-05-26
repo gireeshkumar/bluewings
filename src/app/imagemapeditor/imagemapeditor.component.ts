@@ -8,7 +8,11 @@ declare var $: any;
 declare var generateCode: any;
 declare var resetImageMapper:any;
 
-// using https://github.com/1npy0/easy-mapper
+/* 
+    using https://github.com/1npy0/easy-mapper 
+    http://www.jqueryscript.net/demo/jQuery-Based-Easy-Online-Image-Map-Generator/
+    http://www.jqueryscript.net/other/jQuery-Based-Easy-Online-Image-Map-Generator.html
+*/
 @Component({
   selector: 'app-imagemapeditor',
   templateUrl: './imagemapeditor.component.html',
