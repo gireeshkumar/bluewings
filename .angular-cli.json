@@ -20,6 +20,7 @@
         "styles": [
             "../node_modules/bootstrap/dist/css/bootstrap.css",
             "../node_modules/bootstrap/dist/css/bootstrap-theme.min.css",
+            "../node_modules/bootstrap/dist/css/paper-bootstrap.min.css",
             "bower_components/jquery-ui/themes/base/jquery-ui.min.css",
             "bower_components/reveal-js/css/theme/simple.css",
             "bower_components/select2-4.0.3/dist/css/select2.min.css",
