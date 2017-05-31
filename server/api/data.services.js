@@ -146,6 +146,8 @@ router.post('/:collection', function(req, res) {
     console.log("Save ->" + collectionname);
     console.log(record);
 
+    record.createdby = req.user._id;
+
     collection = dbinstance.collection(collectionname);
     collection.save(record).then(
         meta => {
@@ -239,6 +241,7 @@ router.post('/:collection/:id', function(req, res) {
 
                 console.log(objectoupdate);
 
+                objectoupdate.updatedby = req.user._id;
                 collection.updateByExample(example, objectoupdate).then(result => res.send(result));
 
             } else {
@@ -276,6 +279,9 @@ router.delete('/:collection/:id', function(req, res) {
     if (['domain', 'category', 'tags', 'slides', 'conversation'].indexOf(collectionname) == -1) {
         res.send("Unknown collection - " + collectionname);
     } else {
+
+        //TODO check if the current user has permission to delete this record. (should be the creator)
+
         collection = dbinstance.collection(collectionname);
         collection.removeByKeys([req.params.id]).then(rslt => res.send(rslt), err => res.status(500).send(err));
     }
@@ -290,7 +296,8 @@ router.get('/:collection/:id', function(req, res) {
     if (['domain', 'category', 'tags', 'slides', 'conversation'].indexOf(collectionname) == -1) {
         res.send("Unknown collection - " + collectionname);
     } else {
-
+        // will let read all (created by all) domain/category/tags/slides etc, 
+        // except for conversation
         if (collectionname === "conversation") {
             /*
         FOR conv IN conversation  FILTER conv._key == '321984'
@@ -300,7 +307,7 @@ router.get('/:collection/:id', function(req, res) {
 RETURN merge(conv, {slides:a})
         */
 
-            dbinstance.query(`FOR conv IN conversation  FILTER conv._key == '` + req.params.id + `'
+            dbinstance.query(`FOR conv IN conversation  FILTER conv.createdby == '` + req.user._id + `' && conv._key == '` + req.params.id + `'
                         LET a = (FOR c in conv.slides 
                                     FOR a IN slides FILTER c.slide == a._key RETURN {"key":a._key, "slide":a._key, "file":a.file, "note":c.note, "index":c.index}) 
                         RETURN merge(conv, {slides:a})`)
@@ -353,7 +360,7 @@ FOR conv IN conversation
     
     */
     if (collectionname === "conversation") {
-        dbinstance.query(`FOR conv IN conversation
+        dbinstance.query(`FOR conv IN conversation   FILTER conv.createdby == '` + req.user._id + `' 
                              LET a = (FOR c in conv.slides 
                             FOR a IN slides FILTER c.slide == a._key RETURN {"key":a._key, "slide":a._key, "file":a.file, "note":c.note, "index":c.index}) 
                             RETURN merge(conv, {slides:a})`)

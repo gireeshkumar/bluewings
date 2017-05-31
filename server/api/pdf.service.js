@@ -15,10 +15,10 @@ const dbinstance = require("../database").db;
 // // console.log(PDFDocument);
 
 // using key
-function generatePDF4Conversation(convkey) {
+function generatePDF4Conversation(user, convkey) {
 
     return new Promise(function(resolve, reject) {
-        dbinstance.query(`FOR conv IN conversation  FILTER conv._key == '` + convkey + `'
+        dbinstance.query(`FOR conv IN conversation   FILTER conv.createdby == '` + user._id + `' && conv._key == '` + convkey + `'
                         LET a = (FOR c in conv.slides 
                                     FOR a IN slides FILTER c.slide == a._key RETURN {"key":a._key, "file":a.file, "note":c.note, "index":c.index}) 
                         RETURN merge(conv, {slides:a})`)
@@ -100,7 +100,7 @@ router.get('/', function(req, res) {
 // with conversation key
 router.get('/:key', function(req, res) {
     console.log("Generate conversation PDF => " + req.params.key);
-    generatePDF4Conversation(req.params.key)
+    generatePDF4Conversation(req.user, req.params.key)
         .then(
             pdffile => {
                 res.download(pdffile, 'conversation_' + req.params.key + '.pdf');

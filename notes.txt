@@ -35,3 +35,7 @@ docker run --rm -ti -e ARANGO_ROOT_PASSWORD=root#123 --volumes-from arangodb-per
 FOR doc IN slides
  LET a = (FOR c in doc._category FOR a IN category FILTER c == a._id RETURN a.name) RETURN merge(doc, {categories:a})
 
+
+
+https://github.com/jaredhanson/passport-local
+https://github.com/passport/express-4.x-local-example

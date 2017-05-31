@@ -52,7 +52,7 @@ router.post('/save', function(req, res) { //bodyParser.json(),
 
     for (var i = 0; i < allslidestosave.length; i++) {
         var dta = allslidestosave[i];
-        var p = saveSlide(dta).then(data => savedslides.push(data));
+        var p = saveSlide(dta, req.user).then(data => savedslides.push(data));
         promises.push(p);
     }
 
@@ -62,7 +62,7 @@ router.post('/save', function(req, res) { //bodyParser.json(),
 });
 
 
-function saveSlide(data) {
+function saveSlide(data, user) {
 
     console.log("*** Save Slide ***");
     console.log(data);
@@ -72,23 +72,23 @@ function saveSlide(data) {
     return new Promise(function(resolve, reject) {
         Promise.all([
 
-            saveSlideCollection(data).then(key => {
+            saveSlideCollection(data, user).then(key => {
                 console.log('Save slide, success >>>> [' + data.filename + '] Key = ' + key);
                 slidekey = key;
                 return slidekey;
             }, err => console.log("error[SaveSlide]:" + err)),
 
-            saveCollection('category', data.category).then(keys => {
+            saveCollection(user, 'category', data.category).then(keys => {
                 console.log('Save category, success');
                 catkeys = keys;
             }, err => console.log("error[SaveCategory]:" + err)),
 
-            saveCollection('domain', data.domain).then(keys => {
+            saveCollection(user, 'domain', data.domain).then(keys => {
                 console.log('Save domain, success');
                 domainkeys = keys;
             }, err => console.log("error[SaveDomain]:" + err)),
 
-            saveCollection('tags', data.tags).then(keys => {
+            saveCollection(user, 'tags', data.tags).then(keys => {
                 console.log('Save tags, success');
                 tagkeys = keys;
             }, err => console.log("error[SaveTags]:" + err))
@@ -104,13 +104,13 @@ function saveSlide(data) {
             var sldata = { name: "slide data" };
 
             console.log("Save Edge - Category" + catkeys);
-            saveEdges({ value: 'Category -> Slide', from: 'category', to: 'slide' }, slidekey, catkeys);
+            saveEdges({ value: 'Category -> Slide', from: 'category', to: 'slide', createdby: user._id }, slidekey, catkeys);
 
             console.log("Save Edge - Domain" + domainkeys);
-            saveEdges({ value: 'Edge -> Slide', from: 'domain', to: 'slide' }, slidekey, domainkeys);
+            saveEdges({ value: 'Edge -> Slide', from: 'domain', to: 'slide', createdby: user._id }, slidekey, domainkeys);
 
             console.log("Save Edge - Tags" + tagkeys);
-            saveEdges({ value: 'Tags -> Slide', from: 'tags', to: 'slide' }, slidekey, tagkeys);
+            saveEdges({ value: 'Tags -> Slide', from: 'tags', to: 'slide', createdby: user._id }, slidekey, tagkeys);
 
 
 
@@ -194,12 +194,13 @@ function getTextAttr(array) {
     return txtattr.join(',');
 }
 
-function saveSlideCollection(data) {
+function saveSlideCollection(data, user) {
     return new Promise(function(resolve, reject) {
 
         collection = dbinstance.collection("slides");
 
         const slideobj = { file: data.filename, originalname: data.originalname, title: data.title };
+        slideobj.createdby = user._id;
         slideobj.categories = getTextAttr(data.category);
         slideobj.tags = getTextAttr(data.tags);
         slideobj.domains = getTextAttr(data.domain);
@@ -216,7 +217,7 @@ function saveSlideCollection(data) {
     });
 }
 
-function saveCollection(name, data) {
+function saveCollection(user, name, data) {
 
 
     return new Promise(function(resolve, reject) {
@@ -243,7 +244,7 @@ function saveCollection(name, data) {
             // }
 
             if (did === null || did === undefined) {
-                tosave.push({ name: data[i].text });
+                tosave.push({ name: data[i].text, createdby: user._id });
             } else {
                 ids.push(did);
                 tosave.push({ _key: data[i].id, name: data[i].text });
