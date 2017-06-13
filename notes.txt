@@ -20,6 +20,10 @@ docker exec -ti ngapprunning bash
 docker exec -ti ngapprunning bash -c "cd /data && ng build -w"
 
 
+
+docker run -ti arangodb-persist bash 
+
+
 docker exec -ti ngapprunning bash -c "cd /data && ng build -w"
 ng build -w
 
@@ -29,6 +33,8 @@ ps aux | grep nodejs
 
 docker run --rm -ti -e ARANGO_ROOT_PASSWORD=root#123 --volumes-from arangodb-persist -v /d/docker/arangodb/arangodb3-apps:/var/lib/arangodb-apps:rw -p 8529:8529  arangodb
 
+---Prod-DB 
+docker run --rm -ti -e ARANGO_ROOT_PASSWORD=root#123 --volumes-from arangodb-persist-prod -v /d/docker/arangodb/arangodb3-apps:/var/lib/arangodb-apps:rw -p 8529:8529  arangodb
 
 
 -------- scripts ----
@@ -39,3 +45,22 @@ FOR doc IN slides
 
 https://github.com/jaredhanson/passport-local
 https://github.com/passport/express-4.x-local-example
+
+
+--- create store --
+docker create -v /datastore --name arangodb-persist-prod arangodb/arangodb true
+
+
+
+Create dump 
+   --  arangodump  --server.username root --server.database bluewings --output-directory "bluewings-dump"
+
+Import
+   // create database 'bluewings' and import
+   arangorestore --server.database bluewings --input-directory "bluewings-dump"
+
+
+
+
+
+   http://www.tricksofthetrades.net/2016/03/14/docker-data-volumes/
