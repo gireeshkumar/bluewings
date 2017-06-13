@@ -26,6 +26,9 @@
             "bower_components/select2-4.0.3/dist/css/select2.min.css",
             "bower_components/easy-mapper-master/docs/easy-mapper.css",
             "bower_components/jquery-map-trifecta/css/map-trifecta.css",
+
+            "bower_components/reveal-js/css/reveal.min.css",
+
             "../node_modules/dragula/dist/dragula.css",
             "css/main.css",
             "styles.css"

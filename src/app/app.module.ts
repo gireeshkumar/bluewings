@@ -36,6 +36,7 @@ import { ConversationListComponent } from './conversation-list/conversation-list
 import { ConversationViewComponent } from './conversation-view/conversation-view.component';
 
 import { MyComponent } from './inline-editor-demo';
+import { PresentationViewComponent } from './presentation-view/presentation-view.component';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import { MyComponent } from './inline-editor-demo';
         SlideShowComponent,
         ConversationListComponent,
         ConversationViewComponent,
-        MyComponent
+        MyComponent,
+        PresentationViewComponent
     ],
     imports: [
         BrowserModule,

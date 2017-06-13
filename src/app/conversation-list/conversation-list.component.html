@@ -13,7 +13,10 @@
         <ul class="list-group">
             <li class="list-group-item" *ngFor="let conv of conversations; let i = index">
                 <span class="pull-right">
-                <button type="button" (click)="deleteConversation(conv.key, i)">
+                    
+                <a type="button" class="btn btn-default" routerLink="/presentation/{{conv.key}}" routerLinkActive="active"><span style="color:green" class="glyphicon glyphicon-blackboard" aria-hidden="true"></span></a>
+
+                <button type="button" class="btn btn-default" (click)="deleteConversation(conv.key, i)">
                     <span style="color:red" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
                 </span>
