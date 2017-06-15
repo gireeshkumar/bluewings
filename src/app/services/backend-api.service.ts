@@ -55,6 +55,16 @@ export class BackendApiService {
       .catch(this.handleError);
   }
 
+  //http://192.168.99.100:3000/api/v1/data/slides?filterByUser=1
+
+  public getCollectionByUser(collectionname: string) {
+
+    return this.http.get('/api/v1/data/' + collectionname + '?filterByUser=1').toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+
+  }
+
   public getCollection(collectionname: string, key?: string) {
 
     return this.http.get('/api/v1/data/' + collectionname + (key === null || key === undefined ? '' : '/' + key)).toPromise()

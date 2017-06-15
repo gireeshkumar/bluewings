@@ -1,11 +1,14 @@
 var express = require('express'),
+    fs = require('fs'),
+    path = require('path'),
     router = express.Router()
 extend = require('util')._extend;
 
+const DIR = './uploads/';
 const dbinstance = require("../database").db;
 
 router.get('/', function(req, res) {
-    console.log(dbinstance.db);
+    log(dbinstance.db);
     res.send("Bluewings API Services - Data Services = ");
 })
 
@@ -53,7 +56,7 @@ router.get("/search/slides/q", function(req, res) {
     RETURN DISTINCT i`;
 
 
-    console.log(AQL);
+    log(AQL);
 
     // res.send(AQL);
 
@@ -102,9 +105,9 @@ function filterScript(fkkey, values, colname, colcode) {
 
 router.get('/search/:collection', function(req, res) {
     collectionname = req.params.collection;
-    console.log("Query on collection -" + collectionname);
-    console.log("Field::" + req.query.f);
-    console.log("Query::" + req.query.q);
+    log("Query on collection -" + collectionname);
+    log("Field::" + req.query.f);
+    log("Query::" + req.query.q);
 
     collection = dbinstance.collection(collectionname);
 
@@ -114,7 +117,7 @@ router.get('/search/:collection', function(req, res) {
         })
     ).then(
         results => res.send(results),
-        err => console.error('Failed to fetch all documents:', err)
+        err => error('Failed to fetch all documents:', err)
     );
 });
 
@@ -143,8 +146,8 @@ router.post('/:collection', function(req, res) {
 
     collectionname = req.params.collection;
     record = req.body;
-    console.log("Save ->" + collectionname);
-    console.log(record);
+    log("Save ->" + collectionname);
+    log(record);
 
     record.createdby = req.user._id;
 
@@ -152,8 +155,8 @@ router.post('/:collection', function(req, res) {
     collection.save(record).then(
         meta => {
             var example = { "_key": meta._key + '' };
-            console.log("Find collection by example => " + collectionname);
-            console.log(example);
+            log("Find collection by example => " + collectionname);
+            log(example);
             collection.byExample(example).then(
                 cursor => cursor.map(function(value) {
                     return toCollectionObject(value);
@@ -172,9 +175,9 @@ router.post('/:collection/:id', function(req, res) {
     collectionname = req.params.collection;
     key = req.params.id;
 
-    console.log("Update collection");
-    console.log('Collection:[' + collectionname + ']{' + key + '}');
-    console.log(req.body);
+    log("Update collection");
+    log('Collection:[' + collectionname + ']{' + key + '}');
+    log(req.body);
 
     collection = dbinstance.collection(collectionname);
     var example = { "_key": req.params.id + '' };
@@ -194,7 +197,7 @@ router.post('/:collection/:id', function(req, res) {
         })
     ).then(
         results => {
-            console.log(results)
+            log(results)
             if (results.length > 0) {
                 var objectoupdate = results[0];
 
@@ -202,7 +205,7 @@ router.post('/:collection/:id', function(req, res) {
                 if (collectionname === 'conversation') {
 
                     if (req.body.merge !== undefined && req.body.merge) {
-                        console.log("Merge conversation");
+                        log("Merge conversation");
                         // objectoupdate = extend(objectoupdate, req.body);
                         // can only update notes filed now
                         objectoupdate.name = req.body.name;
@@ -214,7 +217,7 @@ router.post('/:collection/:id', function(req, res) {
                                 var nte = req.body.slides[i].note;
 
                                 for (var j = 0; j < objectoupdate.slides.length; j++) {
-                                    console.log("Match= " + objectoupdate.slides[j].slide + " === " + slidekey);
+                                    log("Match= " + objectoupdate.slides[j].slide + " === " + slidekey);
                                     if (objectoupdate.slides[j].slide === slidekey) {
 
                                         if (nte != null && nte != undefined) {
@@ -239,7 +242,7 @@ router.post('/:collection/:id', function(req, res) {
                     objectoupdate = extend(objectoupdate, req.body);
                 }
 
-                console.log(objectoupdate);
+                log(objectoupdate);
 
                 objectoupdate.updatedby = req.user._id;
                 collection.updateByExample(example, objectoupdate).then(result => res.send(result));
@@ -249,7 +252,7 @@ router.post('/:collection/:id', function(req, res) {
             }
 
         },
-        err => console.error('Failed to fetch all documents:', err)
+        err => error('Failed to fetch all documents:', err)
     );
 });
 router.get('/metadata', function(req, res) {
@@ -273,7 +276,7 @@ router.get('/metadata', function(req, res) {
 
 router.delete('/:collection/:id', function(req, res) {
 
-    console.log("Call to => router.get('/:collection/:id')");
+    log("Call to => router.get('/:collection/:id')");
 
     collectionname = req.params.collection;
     if (['domain', 'category', 'tags', 'slides', 'conversation'].indexOf(collectionname) == -1) {
@@ -283,14 +286,35 @@ router.delete('/:collection/:id', function(req, res) {
         //TODO check if the current user has permission to delete this record. (should be the creator)
 
         collection = dbinstance.collection(collectionname);
-        collection.removeByKeys([req.params.id]).then(rslt => res.send(rslt), err => res.status(500).send(err));
+
+        getCollectionByExample(collectionname, { "_key": req.params.id + '' })
+            .then(results => {
+                    log("Object to remove").log(results);
+                    collection.removeByKeys([req.params.id])
+                        .then(rslt => {
+                            // if successful , delete the slide file, if collection is slide
+                            if (collectionname === "slides") {
+                                // delete the file from disk
+
+                                var file = path.join(global.appRoot, DIR, results.file);
+                                log("Delete local file -").log(file);
+                                fs.unlinkSync(file);
+                            }
+
+                            res.send({ "removed": results, resp: rslt })
+                        }, err => res.status(500).send(err));
+                },
+                err => res.status(500).send(err)
+            );
+
+
     }
 });
 
 
 router.get('/:collection/:id', function(req, res) {
 
-    console.log("Call to => router.get('/:collection/:id')");
+    log("Call to => router.get('/:collection/:id')");
 
     collectionname = req.params.collection;
     if (['domain', 'category', 'tags', 'slides', 'conversation'].indexOf(collectionname) == -1) {
@@ -323,19 +347,19 @@ RETURN merge(conv, {slides:a})
 
         } else {
             // res.send('Find collection [' + collectionname + '] by id[' + req.params.id + '] ');
-            collection = dbinstance.collection(collectionname);
-
             var example = { "_key": req.params.id + '' };
 
+            getCollectionByExample(collectionname, example).then(results => res.send(results), err => res.status(500).send(err));
 
-            collection.byExample(example).then(
-                cursor => cursor.map(function(value) {
-                    return toCollectionObject(value);
-                })
-            ).then(
-                results => res.send((results.length > 0 ? (results.length == 1 ? results[0] : results) : [])),
-                err => console.error('Failed to fetch all documents:', err)
-            );
+            //     collection = dbinstance.collection(collectionname);
+            //     collection.byExample(example).then(
+            //         cursor => cursor.map(function(value) {
+            //             return toCollectionObject(value);
+            //         })
+            //     ).then(
+            //         results => res.send((results.length > 0 ? (results.length == 1 ? results[0] : results) : [])),
+            //         err => error('Failed to fetch all documents:', err)
+            //     );
         }
 
     }
@@ -350,7 +374,12 @@ router.get('/:collection', function(req, res) {
         res.send("Unknown collection - " + collectionname);
         return;
     }
-    console.log("Collection => " + collectionname);
+    log("Collection => " + collectionname);
+
+    var filterbyuser = req.query.filterbyuser;
+
+    log("req.query.filterbyuser::" + filterbyuser);
+
 
     /*
 FOR conv IN conversation
@@ -373,25 +402,46 @@ FOR conv IN conversation
                 err => res.status(500).send('Failed to fetch all documents:' + err)
             );
     } else {
-        getCollectionAllData(collectionname).then(results => res.send(results), err => res.status(500).send(err));
+
+        if (filterbyuser != undefined && filterbyuser == 1) {
+            // filter by createdby
+            var example = { "createdby": req.user._id };
+
+            getCollectionByExample(collectionname, example, true).then(results => res.send(results), err => res.status(500).send(err));
+        } else {
+            getCollectionAllData(collectionname).then(results => res.send(results), err => res.status(500).send(err));
+        }
     }
-
-
-
-
-
 });
 
 
 router.get('/', function(req, res) {
-    console.log(dbinstance);
+    log(dbinstance);
     res.send("Bluewings API Services - Data Services = ");
 })
 
 
 
 
+function getCollectionByExample(collectionname, example, allowarray = false) {
 
+    log("getCollectionByExample=>" + collectionname)
+    log("example").log(example);
+
+    return new Promise(function(resolve, reject) {
+        collection = dbinstance.collection(collectionname);
+        collection.byExample(example).then(
+            cursor => cursor.map(function(value) {
+                return toCollectionObject(value);
+            })
+        ).then(
+            results => resolve(allowarray ? results : (results.length > 0 ? (results.length == 1 ? results[0] : results) : [])),
+            err => reject('Failed to fetch all documents:', err)
+        );
+    });
+
+
+}
 
 function getCollectionAllData(collectionname) {
     return new Promise(function(resolve, reject) {
@@ -408,5 +458,9 @@ function getCollectionAllData(collectionname) {
     });
 }
 
+function log(msg) {
+    console.log(msg);
+    return console;
+}
 
 module.exports = router

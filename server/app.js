@@ -46,11 +46,20 @@ const dbinstance = require("./database");
 app.use(auth.initialize());
 app.use(auth.session());
 
+// for case insensitive query params
+app.use(function(req, res, next) {
+    for (var key in req.query) {
+        req.query[key.toLowerCase()] = req.query[key];
+    }
+    next();
+});
+
 app.get('/', ensureLoggedIn.ensureLoggedIn('/login'), function(req, res, next) {
     next();
 });
 
 app.use("/api/v1", ensureLoggedIn.ensureLoggedIn('/login'), require("./api"));
+
 
 app.get('/api/v1/*', function(req, res) {
     res.send('API Not found', 404);

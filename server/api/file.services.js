@@ -100,17 +100,17 @@ function saveSlide(data, user) {
 
             console.log("Link slide with category/tags/domain => slidekey == " + slidekey);
 
-            var edges = [];
-            var sldata = { name: "slide data" };
+            // var edges = [];
+            // var sldata = { name: "slide data" };
 
-            console.log("Save Edge - Category" + catkeys);
-            saveEdges({ value: 'Category -> Slide', from: 'category', to: 'slide', createdby: user._id }, slidekey, catkeys);
+            // console.log("Save Edge - Category" + catkeys);
+            // saveEdges({ value: 'Category -> Slide', from: 'category', to: 'slide', createdby: user._id }, slidekey, catkeys);
 
-            console.log("Save Edge - Domain" + domainkeys);
-            saveEdges({ value: 'Edge -> Slide', from: 'domain', to: 'slide', createdby: user._id }, slidekey, domainkeys);
+            // console.log("Save Edge - Domain" + domainkeys);
+            // saveEdges({ value: 'Edge -> Slide', from: 'domain', to: 'slide', createdby: user._id }, slidekey, domainkeys);
 
-            console.log("Save Edge - Tags" + tagkeys);
-            saveEdges({ value: 'Tags -> Slide', from: 'tags', to: 'slide', createdby: user._id }, slidekey, tagkeys);
+            // console.log("Save Edge - Tags" + tagkeys);
+            // saveEdges({ value: 'Tags -> Slide', from: 'tags', to: 'slide', createdby: user._id }, slidekey, tagkeys);
 
 
 
@@ -128,9 +128,9 @@ function saveSlide(data, user) {
             ).then(
                 results => {
                     var record = results[0];
-                    record._categories = catkeys;
-                    record._tags = tagkeys;
-                    record._domains = domainkeys;
+                    record._categories = filterNulls(catkeys);
+                    record._tags = filterNulls(tagkeys);
+                    record._domains = filterNulls(domainkeys);
 
                     collection.updateByExample(example, record).then(result => console.log(result));
                 },
@@ -143,8 +143,18 @@ function saveSlide(data, user) {
 
         });
     });
+}
 
-
+function filterNulls(array) {
+    var toarray = [];
+    if (array != undefined) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] !== null && array[i] !== undefined) {
+                toarray.push(array[i]);
+            }
+        }
+    }
+    return toarray;
 }
 
 function saveEdges(sldata, slidekey, keys) {
@@ -199,6 +209,8 @@ function saveSlideCollection(data, user) {
 
         collection = dbinstance.collection("slides");
 
+
+
         const slideobj = { file: data.filename, originalname: data.originalname, title: data.title };
         slideobj.createdby = user._id;
         slideobj.categories = getTextAttr(data.category);
@@ -206,11 +218,24 @@ function saveSlideCollection(data, user) {
         slideobj.domains = getTextAttr(data.domain);
         slideobj.searchcontent = slideobj.categories + ' ' + slideobj.tags + ' ' + slideobj.domains + ' ' + slideobj.title;
 
-        collection.save(slideobj).then(
+
+        //collection.updateByExample(example, objectoupdate).then(result => res.send(result));
+
+        var promise = (data.key !== undefined) ? collection.updateByExample({ "_key": data.key + '' }, slideobj) : collection.save(slideobj);
+
+        promise.then(
             meta => {
-                console.log("Slide save success");
-                console.log(meta);
-                resolve(meta._key);
+                if ((data.key !== undefined)) {
+                    // update operation
+                    console.log("Slide UPDATE success");
+                    console.log(meta);
+                    resolve(data.key);
+                } else {
+                    console.log("Slide INSERT success");
+                    console.log(meta);
+                    resolve(meta._key);
+                }
+
             },
             err => console.error('Failed to save document:', err)
         );

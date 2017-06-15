@@ -1,0 +1,43 @@
+<div class="alert alert-success alert-dismissible" role="alert" id="updateSuccess">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> Update successful
+</div>
+
+
+<div class="alert alert-danger  alert-dismissible" role="alert" id="updateErr">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> {{errorMessage}}
+</div>
+
+<div class="row">
+    <div class="col-xs-6 col-md-3" *ngFor="let slide of slides; let i = index">
+        <div class="thumbnail">
+
+            <img src="api/v1/file/view/{{slide.file}}" class="gallery-items">
+
+            <form>
+                <div class="form-group">
+                    <label for="email">Title/Name [{{slide.key}}]</label>
+                    <input type="text" class="form-control" [(ngModel)]="slide.title" name="description">
+                    <p class="help-block">Required. Title or name of the slides, used when navigation/slide show</p>
+                </div>
+                <div class="form-group">
+                    <label for="email">Category</label>
+                    <app-select2-custom [(data)]="categories" [(selecteddata)]="slide.catlist"></app-select2-custom>
+                </div>
+                <div class="form-group">
+                    <label for="email">Domain</label>
+                    <app-select2-custom [(data)]="domains" [(selecteddata)]="slide.domainlist"></app-select2-custom>
+                </div>
+                <div class="form-group">
+                    <label for="email">Tags</label>
+                    <app-select2-custom [(data)]="tags" [(selecteddata)]="slide.taglist"></app-select2-custom>
+                </div>
+            </form>
+
+
+            <div class="caption" style="height: 40px">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="deleteSlide(slide, index)"><span style="color:red; font-size: 18px" class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="saveSlide(slide, index)"><span style="color:green;  font-size: 18px" class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></button>
+            </div>
+        </div>
+    </div>
+</div>

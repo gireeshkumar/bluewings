@@ -14,12 +14,13 @@ export class Select2CustomComponent implements OnInit, AfterViewInit {
   // seldata = [{ id: 0, text: 'enhancement' },
   //             { id: 1, text: 'bug' }, { id: 2, text: 'duplicate' },
   //             { id: 3, text: 'invalid' }, { id: 4, text: 'wontfix' }];
-  @Input() selecteddata: any;
+  @Input() _selecteddata: any;
   @Output() selecteddataChange: EventEmitter<Object> = new EventEmitter<Object>();
 
   @ViewChild('select2inputEle') select2inputEle: ElementRef;
 
   datamap: any;
+  sel2componet: any;
 
   constructor() { }
 
@@ -28,15 +29,74 @@ export class Select2CustomComponent implements OnInit, AfterViewInit {
 
 
   get data(): any {
-      return this._data;
+    return this._data;
   }
 
   @Input('data')
   set data(value: any) {
-      this._data = value;
-      console.log('Data changed');
-      console.log(value);
+    this._data = value;
+    console.log('Data changed');
+    console.log(value);
   }
+
+  @Input('selecteddata')
+  set selecteddata(value: any) {
+    if (!this.isDataChanged(value)) {
+      return;
+    }
+    this._selecteddata = value;
+    console.log('_selecteddata changed');
+
+    this.initPreValues();
+  }
+  get selecteddata() {
+    return this._selecteddata;
+  }
+
+  isDataChanged(arrayin) {
+    if (arrayin !== undefined && this._selecteddata !== undefined) {
+      if (arrayin.length != this._selecteddata.length) {
+        return true;
+      } else {
+        // compare items, will compare only id
+        var mp = [];
+        for (var i = 0; i < this._selecteddata.length; i++) {
+          mp['_' + ((this._selecteddata[i].id === undefined) ? this._selecteddata[i].text : this._selecteddata[i].id)] = 1; // 1 is dummy value as its a map
+        }
+
+        for (var i = 0; i < arrayin.length; i++) {
+
+          var key = '_' + (arrayin[i].id === undefined ? arrayin[i].text : arrayin[i].id)+'';
+
+          if (mp[key] === undefined) {
+            // missmatch
+            return true;
+          } else {
+            // exist in both place
+            delete mp[key];
+          }
+        }
+
+        // any thing left in 'mp', missmatch
+        return mp.length > 0;
+      }
+    }
+    else if (arrayin !== undefined){
+      return true;
+    }
+    return false;
+  }
+
+  initPreValues() {
+    if (this._selecteddata != undefined && this._selecteddata.length > 0 && this.sel2componet != undefined) {
+      var mp = [];
+      for (var i = 0; i < this._selecteddata.length; i++) {
+        mp.push(this._selecteddata[i].id);
+      }
+      this.sel2componet.val(mp).trigger("change");
+    }
+  }
+
 
   ngAfterViewInit() {
 
@@ -53,18 +113,22 @@ export class Select2CustomComponent implements OnInit, AfterViewInit {
 
 
 
-    const sel2componet = $(this.select2inputEle.nativeElement).select2({
+    this.sel2componet = $(this.select2inputEle.nativeElement).select2({
       data: this.data, tags: true
     });
 
-    sel2componet.on('change', function (e) {
-      compinstance.onChange(sel2componet.val());
+    this.sel2componet.on('change', function (e) {
+      compinstance.onChange(compinstance.sel2componet.val());
     });
 
+    this.initPreValues();
   }
 
   onChange(data): void {
     console.log('Change made -- onChange');
+    if (data === null || data === undefined) {
+      return;
+    }
     // processing, new and existing data
 
     const tmpdata = [];
@@ -79,7 +143,7 @@ export class Select2CustomComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.selecteddata = tmpdata;
+    this._selecteddata = tmpdata;
     this.selecteddataChange.emit(tmpdata);
   }
 
